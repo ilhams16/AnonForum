@@ -1,4 +1,5 @@
 Imports AnonForum.BO
+Imports System.Configuration
 Imports System.Data
 Imports System.Data.SqlClient
 
@@ -10,9 +11,9 @@ Public Class UserDAL
     Private cmd As SqlCommand
     Private dr As SqlDataReader
 
+
     Public Sub New()
-        strConn = "Server=.\BSISqlExpress;Database=AnonForum;Trusted_Connection=True;"
-        conn = New SqlConnection(strConn)
+        strConn = New SqlConnection(ConfigurationManager.AppSettings.Get("MyDbConnectionString")).ConnectionString
     End Sub
 
     Public Function GetAll() As List(Of UserAuth) Implements IUser.GetAllUser
@@ -39,22 +40,22 @@ Public Class UserDAL
 
             Return UserAuths
         Catch ex As Exception
-            Throw
+            Throw ex
         Finally
             cmd.Dispose()
             conn.Close()
         End Try
     End Function
 
-    Public Function UserLogin(ByVal username As String, ByVal email As String, ByVal password As String) As UserAuth Implements IUser.UserLogin
+    Public Function UserLogin(ByVal usernameOrEmail As String, ByVal password As String) As UserAuth Implements IUser.UserLogin
         Dim user As New UserAuth()
         Try
             Using conn As New SqlConnection(strConn)
                 Dim strSql As String = "[dbo].[UserLogin]"
-                Dim cmd As New SqlCommand(strSql, conn)
-                cmd.CommandType = CommandType.StoredProcedure
-                cmd.Parameters.AddWithValue("@username", username)
-                cmd.Parameters.AddWithValue("@email", email)
+                Dim cmd As New SqlCommand(strSql, conn) With {
+                    .CommandType = CommandType.StoredProcedure
+                }
+                cmd.Parameters.AddWithValue("@usernameoremail", usernameOrEmail)
                 cmd.Parameters.AddWithValue("@password", password)
                 conn.Open()
                 Dim dr As SqlDataReader = cmd.ExecuteReader()

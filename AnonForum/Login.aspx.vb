@@ -8,7 +8,8 @@ Public Class Login
     End Sub
 
     Protected Sub btnLogin_Click(sender As Object, e As EventArgs) Handles btnLogin.Click
-        Dim user = dal.UserLogin(txtUsername.Text, "", txtPassword.Text)
+        Dim user = dal.UserLogin(txtUsername.Text, txtPassword.Text)
         lblMessage.Text = user.Username
+        Response.RedirectPermanent("/")
     End Sub
 End Class

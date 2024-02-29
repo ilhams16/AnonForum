@@ -5,9 +5,11 @@ VisualStudioVersion = 17.9.34616.47
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "AnonForum", "AnonForum\AnonForum.vbproj", "{CD8E53D2-B177-494B-AE08-1CEEF98E43D7}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "AnonForum.BO", "AnonForum.BO\AnonForum.BO.vbproj", "{1C156FD5-DBD5-4C75-B3D2-DF3CF313ABE7}"
+Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "AnonForum.BO", "AnonForum.BO\AnonForum.BO.vbproj", "{1C156FD5-DBD5-4C75-B3D2-DF3CF313ABE7}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "AnonForum.DAL", "AnonForum.DAL\AnonForum.DAL.vbproj", "{19C1E918-F45E-48FE-B5E8-5E4D22022E2C}"
+Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "AnonForum.DAL", "AnonForum.DAL\AnonForum.DAL.vbproj", "{19C1E918-F45E-48FE-B5E8-5E4D22022E2C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnonForum.BLL", "AnonForum.BLL\AnonForum.BLL.csproj", "{02386FE7-296B-4AF2-87A2-A7DAA213080E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{19C1E918-F45E-48FE-B5E8-5E4D22022E2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{19C1E918-F45E-48FE-B5E8-5E4D22022E2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{19C1E918-F45E-48FE-B5E8-5E4D22022E2C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02386FE7-296B-4AF2-87A2-A7DAA213080E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02386FE7-296B-4AF2-87A2-A7DAA213080E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02386FE7-296B-4AF2-87A2-A7DAA213080E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02386FE7-296B-4AF2-87A2-A7DAA213080E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
