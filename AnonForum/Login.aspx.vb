@@ -8,8 +8,21 @@ Public Class Login
     End Sub
 
     Protected Sub btnLogin_Click(sender As Object, e As EventArgs) Handles btnLogin.Click
-        Dim user = dal.UserLogin(txtUsername.Text, txtPassword.Text)
-        lblMessage.Text = user.Username
-        Response.RedirectPermanent("/")
+        If IsValidUser(txtUsername.Text, txtPassword.Text) Then
+            FormsAuthentication.SetAuthCookie(txtUsername.Text, False)
+            Response.Redirect(FormsAuthentication.DefaultUrl)
+        Else
+            lblMessage.Text = "Invalid username or password."
+        End If
+    End Sub
+    Protected Function IsValidUser(username As String, password As String) As Boolean
+        Dim result = False
+        Dim user = dal.UserLogin(username, password)
+        result = True
+        Return result
+    End Function
+
+    Protected Sub btnRegister_Click(sender As Object, e As EventArgs) Handles btnRegister.Click
+        Response.Redirect("/Register")
     End Sub
 End Class

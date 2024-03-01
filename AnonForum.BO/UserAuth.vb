@@ -7,6 +7,6 @@ Public Class UserAuth
     Public Property Email As String
     Public Property Password As String
     Public Property Nickname As String
-    Public Property UserImage As String
+    Public Property UserImage As Byte()
     Public Property Users As List(Of UserAuth)
 End Class

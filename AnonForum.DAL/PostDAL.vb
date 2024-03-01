@@ -182,4 +182,32 @@ Public Class PostDAL
 
         Return status
     End Function
+    Public Function GetAllCategories() As List(Of Category) Implements IPost.GetAllCategories
+        Dim categories As New List(Of Category)
+        Try
+            Dim strSql = "select * from PostCategory"
+
+            conn = New SqlConnection(strConn)
+            cmd = New SqlCommand(strSql, conn)
+            conn.Open()
+            dr = cmd.ExecuteReader()
+            If dr.HasRows Then
+                While dr.Read
+                    Dim category As New Category With {
+                        .PostCategoryID = CInt(dr("PostCategoryID")),
+                        .Name = dr("Name").ToString()
+                    }
+                    categories.Add(category)
+                End While
+            End If
+            dr.Close()
+
+            Return categories
+        Catch ex As Exception
+            Throw
+        Finally
+            cmd.Dispose()
+            conn.Close()
+        End Try
+    End Function
 End Class

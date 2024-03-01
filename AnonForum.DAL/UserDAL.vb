@@ -1,4 +1,5 @@
 Imports AnonForum.BO
+Imports System.ComponentModel
 Imports System.Configuration
 Imports System.Data
 Imports System.Data.SqlClient
@@ -16,7 +17,7 @@ Public Class UserDAL
         strConn = New SqlConnection(ConfigurationManager.AppSettings.Get("MyDbConnectionString")).ConnectionString
     End Sub
 
-    Public Function GetAll() As List(Of UserAuth) Implements IUser.GetAllUser
+    Public Function GetAll() As IEnumerable(Of UserAuth) Implements IUser.GetAllUser
         Dim UserAuths As New List(Of UserAuth)
         Try
             Dim strSql = "SELECT * FROM dbo.UserAuth"
@@ -31,8 +32,16 @@ Public Class UserDAL
                         .UserID = CInt(dr("UserID")),
                         .Username = dr("Username").ToString(),
                         .Email = dr("Email").ToString(),
-                        .Nickname = dr("Nickname").ToString()
+                        .Nickname = dr("Nickname").ToString(),
+                        .UserImage = dr("UserImage")
                     }
+                    'If Not (dr.IsDBNull("UserImage")) Then
+                    '    ' Handle the case where UserImage is null
+                    '    ' For example, you can assign a default image or null to the UserImage property
+                    '    'user.UserImage =
+                    '    user.UserImage = System.Text.Encoding.Default.GetBytes("0x89504E470D0A1A0A0000000D4948445200000780000004380806000000E8D3C143000000017352474200AECE1CE900000004")
+                    'Else
+                    'End If
                     UserAuths.Add(user)
                 End While
             End If
@@ -89,13 +98,15 @@ Public Class UserDAL
 		                @username,
 		                @email,
 		                @password,
-		                @nickname
+		                @nickname,
+@userimage
                 SELECT	'Return Value' = @return_value"
             Dim cmd As New SqlCommand(strSql, conn)
             cmd.Parameters.AddWithValue("@username", user.Username)
             cmd.Parameters.AddWithValue("@email", user.Email)
             cmd.Parameters.AddWithValue("@password", user.Password)
             cmd.Parameters.AddWithValue("@nickname", user.Nickname)
+            cmd.Parameters.AddWithValue("@userimage", user.UserImage)
             conn.Open()
             Dim dr As SqlDataReader = cmd.ExecuteReader()
 

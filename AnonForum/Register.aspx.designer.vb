@@ -11,16 +11,7 @@ Option Strict On
 Option Explicit On
 
 
-Partial Public Class Login
-
-    '''<summary>
-    '''lblMessage control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents lblMessage As Global.System.Web.UI.WebControls.Label
+Partial Public Class WebForm1
 
     '''<summary>
     '''txtUsername control.
@@ -41,13 +32,31 @@ Partial Public Class Login
     Protected WithEvents txtPassword As Global.System.Web.UI.WebControls.TextBox
 
     '''<summary>
-    '''btnLogin control.
+    '''txtEmail control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents btnLogin As Global.System.Web.UI.WebControls.Button
+    Protected WithEvents txtEmail As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>
+    '''txtNick control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents txtNick As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>
+    '''fileImage control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents fileImage As Global.System.Web.UI.WebControls.FileUpload
 
     '''<summary>
     '''btnRegister control.
@@ -57,4 +66,13 @@ Partial Public Class Login
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents btnRegister As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>
+    '''btnLogin control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents btnLogin As Global.System.Web.UI.WebControls.Button
 End Class

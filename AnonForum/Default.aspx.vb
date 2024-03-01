@@ -1,6 +1,4 @@
 ﻿Imports AnonForum.BLL
-Imports AnonForum.BO
-Imports AnonForum.DAL
 
 Public Class _Default
     Inherits Page
@@ -8,10 +6,15 @@ Public Class _Default
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As EventArgs) Handles Me.Load
         If Not (IsPostBack) Then
-            Dim posts = GetPostsFromDatabase()
-            postRepeater.DataSource = posts
-            postRepeater.DataBind()
+            If (Context.User.Identity.IsAuthenticated) Then
+                Response.Redirect("/UserHomePage")
+            Else
+                Dim posts = GetPostsFromDatabase()
+                postRepeater.DataSource = posts
+                postRepeater.DataBind()
+            End If
         End If
+
     End Sub
     Protected Function GetPostsFromDatabase()
         Dim posts = postBLL.GetAllPosts()
@@ -21,4 +24,5 @@ Public Class _Default
     Protected Sub postRepeater_ItemCommand(source As Object, e As RepeaterCommandEventArgs) Handles postRepeater.ItemCommand
 
     End Sub
+
 End Class

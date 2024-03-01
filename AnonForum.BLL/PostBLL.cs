@@ -85,5 +85,19 @@ namespace AnonForum.BLL
         {
             throw new NotImplementedException();
         }
+        public IEnumerable<PostCategoryDTO> GetAllCategories()
+        {
+            List<PostCategoryDTO> listCategoriesDto = new List<PostCategoryDTO>();
+            var categories = _postDAL.GetAllCategories();
+            foreach (var category in categories)
+            {
+                listCategoriesDto.Add(new PostCategoryDTO
+                {
+                    PostCategoryID = category.PostCategoryID,
+                    Name = category.Name,
+                });
+            }
+            return listCategoriesDto;
+        }
     }
 }

@@ -167,7 +167,8 @@
     <Content Include="Scripts\bootstrap.esm.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="WebForm2.aspx" />
+    <Content Include="Register.aspx" />
+    <Content Include="UserHomePage.aspx" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />
@@ -265,12 +266,19 @@
     <Compile Include="Site.Mobile.Master.designer.vb">
       <DependentUpon>Site.Mobile.Master</DependentUpon>
     </Compile>
-    <Compile Include="WebForm2.aspx.designer.vb">
-      <DependentUpon>WebForm2.aspx</DependentUpon>
+    <Compile Include="Register.aspx.designer.vb">
+      <DependentUpon>Register.aspx</DependentUpon>
     </Compile>
-    <Compile Include="WebForm2.aspx.vb">
-      <DependentUpon>WebForm2.aspx</DependentUpon>
+    <Compile Include="Register.aspx.vb">
+      <DependentUpon>Register.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="UserHomePage.aspx.designer.vb">
+      <DependentUpon>UserHomePage.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="UserHomePage.aspx.vb">
+      <DependentUpon>UserHomePage.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>

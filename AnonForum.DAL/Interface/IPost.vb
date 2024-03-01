@@ -6,4 +6,5 @@ Public Interface IPost
     Function GetPostbyTitle(title As String) As List(Of Post)
     Function EditPost(post As Post, newPost As Post)
     Function DeletePost(title As String, userID As Integer)
+    Function GetAllCategories() As List(Of Category)
 End Interface

@@ -11,50 +11,59 @@ Option Strict On
 Option Explicit On
 
 
-Partial Public Class Login
+Partial Public Class _UserHomePage
 
     '''<summary>
-    '''lblMessage control.
+    '''btnLogout control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents lblMessage As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents btnLogout As Global.System.Web.UI.WebControls.Button
 
     '''<summary>
-    '''txtUsername control.
+    '''txtPostText control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents txtUsername As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents txtPostText As Global.System.Web.UI.WebControls.TextBox
 
     '''<summary>
-    '''txtPassword control.
+    '''ddlCategories control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents txtPassword As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents ddlCategories As Global.System.Web.UI.WebControls.DropDownList
 
     '''<summary>
-    '''btnLogin control.
+    '''fileImage control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents btnLogin As Global.System.Web.UI.WebControls.Button
+    Protected WithEvents fileImage As Global.System.Web.UI.WebControls.FileUpload
 
     '''<summary>
-    '''btnRegister control.
+    '''btnPost control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents btnRegister As Global.System.Web.UI.WebControls.Button
+    Protected WithEvents btnPost As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>
+    '''postRepeater control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents postRepeater As Global.System.Web.UI.WebControls.Repeater
 End Class

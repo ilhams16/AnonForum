@@ -31,7 +31,11 @@ namespace AnonForum.BLL
             {
                 var newUser = new UserAuth
                 {
-                    Username = entity.Username
+                    Username = entity.Username,
+                    Email = entity.Email,
+                    Password = entity.Password,
+                    Nickname = entity.Nickname,
+                    UserImage = entity.UserImage,
                 };
                 return (string)_userDAL.AddNewUser(newUser);
             }
@@ -75,7 +79,8 @@ namespace AnonForum.BLL
                     Username = user.Username,
                     Email = user.Email,
                     Password = user.Password,
-                    Nickname = user.Nickname
+                    Nickname = user.Nickname,
+                    UserImage = user.UserImage
                 });
             }
             return listUsersDto;
@@ -97,6 +102,7 @@ namespace AnonForum.BLL
                 userDto.Email = user.Email;
                 userDto.Password = user.Password;
                 userDto.Nickname = user.Nickname;
+                userDto.UserImage = user.UserImage;
             }
             else
             {
