@@ -23,6 +23,15 @@ Partial Public Class _UserHomePage
     Protected WithEvents btnLogout As Global.System.Web.UI.WebControls.Button
 
     '''<summary>
+    '''txtTitle control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents txtTitle As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>
     '''txtPostText control.
     '''</summary>
     '''<remarks>

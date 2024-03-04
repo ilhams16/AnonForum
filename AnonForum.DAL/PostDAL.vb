@@ -18,7 +18,10 @@ Public Class PostDAL
         Try
             Dim strSql = "select * from Posts p
                             join UserAuth ua
-                            on p.UserID = ua.UserID"
+                            on p.UserID = ua.UserID
+							join PostCategory pc
+							on p.PostCategoryID = pc.PostCategoryID
+							order by p.TimeStamp desc"
 
             conn = New SqlConnection(strConn)
             cmd = New SqlCommand(strSql, conn)
@@ -31,11 +34,12 @@ Public Class PostDAL
                         .PostID = dr("PostID").ToString(),
                         .Title = dr("Title").ToString(),
                         .PostText = dr("PostText").ToString(),
-                        .TimeStamp = dr("TimeStamp").ToString(),
+                        .TimeStamp = DirectCast(dr("TimeStamp"), Date),
                         .PostCategoryID = CInt(dr("PostCategoryID")),
                         .TotalLikes = CInt(dr("TotalLikes")),
                         .TotalDislikes = CInt(dr("TotalDislikes")),
-                        .Username = dr("Username").ToString()
+                        .Username = dr("Username").ToString(),
+                        .CategoryName = dr("Name").ToString()
                     }
                     Posts.Add(post)
                 End While
@@ -51,37 +55,33 @@ Public Class PostDAL
         End Try
     End Function
 
-    Public Function GetPostbyTitle(ByVal title As String) As List(Of Post) Implements IPost.GetPostbyTitle
-        Dim Posts As New List(Of Post)
+    Public Function GetPostbyTitle(ByVal title As String, ByVal username As String) As Post Implements IPost.GetPostbyTitleandUsername
         Try
+            Dim resPost As New Post
             Dim strSql = "select * from Posts p
                             join UserAuth ua
                             on p.UserID = ua.UserID
-                            where p.Title = @title"
+                            where p.Title = @title and ua.Username = @username"
             conn = New SqlConnection(strConn)
             cmd = New SqlCommand(strSql, conn)
             cmd.Parameters.AddWithValue("@title", title)
+            cmd.Parameters.AddWithValue("@username", username)
             conn.Open()
             dr = cmd.ExecuteReader()
             If dr.HasRows Then
-                While dr.Read
-                    Dim post As New Post With {
-                        .UserID = CInt(dr("UserID")),
-                        .PostID = dr("PostID").ToString(),
-                        .Title = dr("Title").ToString(),
-                        .PostText = dr("PostText").ToString(),
-                        .TimeStamp = dr("TimeStamp").ToString(),
-                        .PostCategoryID = CInt(dr("PostCategoryID")),
-                        .TotalLikes = CInt(dr("TotalLikes")),
-                        .TotalDislikes = CInt(dr("TotalDislikes")),
-                        .Username = dr("Username").ToString()
-                    }
-                    Posts.Add(post)
-                End While
+                dr.Read()
+                resPost.UserID = CInt(dr("UserID"))
+                resPost.PostID = dr("PostID").ToString()
+                resPost.Title = dr("Title").ToString()
+                resPost.PostText = dr("PostText").ToString()
+                resPost.TimeStamp = dr("TimeStamp").ToString()
+                resPost.PostCategoryID = CInt(dr("PostCategoryID"))
+                resPost.TotalLikes = CInt(dr("TotalLikes"))
+                resPost.TotalDislikes = CInt(dr("TotalDislikes"))
+                resPost.Username = dr("Username").ToString()
             End If
             dr.Close()
-
-            Return Posts
+            Return resPost
         Catch ex As Exception
             Throw
         Finally
@@ -209,5 +209,31 @@ Public Class PostDAL
             cmd.Dispose()
             conn.Close()
         End Try
+    End Function
+    Public Function LikePost(ByVal userID As Integer, ByVal postID As Integer) Implements IPost.LikePost
+        Dim status As Integer
+        Using conn As New SqlConnection(strConn)
+            Dim strSql As String = "DECLARE	@return_value int
+                EXEC	@return_value = [dbo].[LikePostSP]
+		                @userID
+                        ,@postID
+                SELECT	'Return Value' = @return_value"
+            Dim cmd As New SqlCommand(strSql, conn)
+            cmd.Parameters.AddWithValue("@userID", userID)
+            cmd.Parameters.AddWithValue("@postID", postID)
+            conn.Open()
+            Dim dr As SqlDataReader = cmd.ExecuteReader()
+
+            If dr.HasRows Then
+                dr.Read()
+                status = CInt(dr("Status"))
+            End If
+
+            dr.Close()
+            cmd.Dispose()
+            conn.Close()
+        End Using
+
+        Return status
     End Function
 End Class

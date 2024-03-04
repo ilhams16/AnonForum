@@ -55,6 +55,34 @@ Public Class UserDAL
             conn.Close()
         End Try
     End Function
+    Public Function GetbyUsername(username As String) As UserAuth Implements IUser.GetbyUsername
+        Dim user As New UserAuth()
+        Try
+            Using conn As New SqlConnection(strConn)
+                Dim strSql = "SELECT * FROM dbo.UserAuth where Username=@username"
+                Dim cmd As New SqlCommand(strSql, conn)
+                cmd.Parameters.AddWithValue("@username", username)
+                conn.Open()
+                Dim dr As SqlDataReader = cmd.ExecuteReader()
+
+                If dr.HasRows Then
+                    dr.Read()
+                    user.UserID = CInt(dr("UserID"))
+                    user.Username = dr("Username").ToString()
+                    user.Email = dr("Email").ToString()
+                    user.Nickname = dr("Nickname").ToString()
+                    user.Password = dr("Password").ToString()
+                End If
+
+                dr.Close()
+                cmd.Dispose()
+                conn.Close()
+            End Using
+        Catch ex As Exception
+            Throw New ArgumentException(ex.Message)
+        End Try
+        Return user
+    End Function
 
     Public Function UserLogin(ByVal usernameOrEmail As String, ByVal password As String) As UserAuth Implements IUser.UserLogin
         Dim user As New UserAuth()
@@ -85,8 +113,6 @@ Public Class UserDAL
         Catch ex As Exception
             Throw New ArgumentException(ex.Message)
         End Try
-
-
         Return user
     End Function
 

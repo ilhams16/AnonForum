@@ -17,7 +17,6 @@ Public Class WebForm1
         newUser.Nickname = txtNick.Text
         newUser.UserImage = fileImage.FileBytes
         Dim createUser = userBLL.AddNewUser(newUser)
-        Response.Write("<script>alert('{createUser}')</script>")
         Response.Redirect("/Login")
     End Sub
 

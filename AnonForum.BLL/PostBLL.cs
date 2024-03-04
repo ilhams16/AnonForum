@@ -99,5 +99,44 @@ namespace AnonForum.BLL
             }
             return listCategoriesDto;
         }
+        public PostDTO GetPostbyTitleandUsername(string title, string username)
+        {
+            PostDTO postDto = new PostDTO();
+            var post = _postDAL.GetPostbyTitleandUsername(title,username);
+            if (post != null)
+            {
+                postDto.UserID = post.UserID;
+                postDto.Title = post.Title;
+                postDto.PostText = post.PostText;
+                postDto.PostCategoryID = post.PostCategoryID;
+                postDto.TotalLikes = post.TotalLikes;
+                postDto.TotalDislikes = post.TotalDislikes;
+                postDto.Username = post.Username;
+            }
+            else
+            {
+                throw new ArgumentException($"Post not found");
+            }
+            return postDto;
+        }
+        public bool LikePost(int userID, int postID)
+        {
+            try
+            {
+                bool result;
+                int like = (int)_postDAL.LikePost(userID, postID);
+                if (like != 0) {
+                    result = true;
+                } else
+                {
+                    result = false;
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException(ex.Message);
+            }
+        }
     }
 }

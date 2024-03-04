@@ -120,9 +120,28 @@ namespace AnonForum.BLL
         {
             throw new NotImplementedException();
         }
-    
-       
-       
+        public UserDTO GetUserbyUsername(String username)
+        {
+            UserDTO userDto = new UserDTO();
+            var user = _userDAL.GetbyUsername(username);
+            if (user != null)
+            {
+                userDto.UserID = user.UserID;
+                userDto.Username = user.Username;
+                userDto.Email = user.Email;
+                userDto.Password = user.Password;
+                userDto.Nickname = user.Nickname;
+                userDto.UserImage = user.UserImage;
+            }
+            else
+            {
+                throw new ArgumentException($"{username} not found");
+            }
+            return userDto;
+        }
+
+
+
 
     }
 }

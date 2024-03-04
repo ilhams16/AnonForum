@@ -13,5 +13,6 @@ namespace AnonForum.BLL.Interface
         IEnumerable<Post> GetPosts();
         IEnumerable<Post> GetPostbyCategory(int id);
         string DeleteUser(string title, int userID);
+        Boolean LikePost(int userID, int postID);
     }
 }
