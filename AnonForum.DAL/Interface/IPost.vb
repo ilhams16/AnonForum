@@ -7,5 +7,10 @@ Public Interface IPost
     Function EditPost(post As Post, newPost As Post)
     Function DeletePost(title As String, userID As Integer)
     Function GetAllCategories() As List(Of Category)
-    Function LikePost(userID As Integer, postID As Integer)
+    Sub LikePost(postID As Integer, userID As Integer)
+    Sub UnlikePost(postID As Integer, userID As Integer)
+    Function GetLike(postID As Integer, userID As Integer) As Boolean
+    Sub DislikePost(postID As Integer, userID As Integer)
+    Sub UndislikePost(postID As Integer, userID As Integer)
+    Function GetDislike(postID As Integer, userID As Integer) As Boolean
 End Interface

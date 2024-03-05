@@ -4,31 +4,28 @@
 
     <main>
         <section class="row" aria-labelledby="aspnetTitle">
-            <div class="container">
+            <div>
                 <asp:Repeater ID="postRepeater" runat="server">
                     <ItemTemplate>
-                        <div class="card my-2 mx-auto p-2 rounded-2 bg-light">
+                        <div class="rounded-2 bg-light p-3 border-bottom border-2 mt-1">
                             <div class="d-flex align-items-center justify-content-start">
                                 <img src="Assets/user.png" class="img rounded-circle" width="20" height="20" alt="User Profile Image" />
-                                <h4 class="ms-2"><%# Eval("Username") %></h4>
+                                <asp:Label ID="Username" CssClass="ms-2" runat="server" Text='<%# Eval("Username") %>'></asp:Label>
                             </div>
                             <div class="my-3">
-                                <h3 class="text-center"><%# Eval("Title") %></h3>
+                                <h3 class="text-center">
+                                    <asp:Label ID="Title" CssClass="text-center" runat="server" Text='<%# Eval("Title") %>'></asp:Label></h3>
                                 <p class="text-start"><%# Eval("PostText") %></p>
                             </div>
                             <div class="d-block">
-                                <div class="d-flex align-items-center justify-content-start">
-                                    <asp:ImageButton ID="btnLike" runat="server" src="Assets/like.png" Width="50" class="ms-2 btn" />
-                                    <asp:ImageButton ID="btnDislike" runat="server" src="Assets/dislike.png" Width="50" class="ms-2 btn" />
-                                    <asp:ImageButton ID="btnComment" runat="server" src="Assets/comment.png" Width="50" class="ms-2 btn" />
-                                </div>
-                                <div class="d-flex align-items-center justify-content-start">
-                                    <h4 class="ms-2 mx-6"><%# Eval("TotalLikes") %></h4>
-                                    <h4 class="ms-2 mx-6"><%# Eval("TotalDislikes") %></h4>
+                                <div class="d-flex align-items-center justify-content-start m-3">
+                                    <asp:Button ID="btnLike" runat="server" CssClass="btn-primary" Text="Like" CommandName="likePost" /><h4 class="text-center mx-2"><%# Eval("TotalLikes") %></h4>
+                                    <asp:Button ID="btnDislike" runat="server" CssClass="btn-primary" text="Dislike" /><h4 class="text-center mx-2"><%# Eval("TotalDislikes") %></h4>
+                                    <asp:Button ID="btnComment" runat="server" cssClass="btn-primary" text="Comment"/>
                                 </div>
                             </div>
                             <div class="text-end">
-                                <p class="text-muted">Published on: <%# Eval("TimeStamp", "{0:MMMM dd, yyyy}") %></p>
+                                <p class="text-muted">Published on: <%# Eval("TimeStamp", "{0:MM/dd/yyyy}") %></p>
                             </div>
                         </div>
                     </ItemTemplate>

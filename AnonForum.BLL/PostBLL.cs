@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Text;
 using AnonForum.BLL.DTOs.Post;
 using AnonForum.BLL.DTOs.User;
+using AnonForum.BLL.Interface;
 using AnonForum.BO;
 using AnonForum.DAL;
 
 namespace AnonForum.BLL
 {
-    public class PostBLL
+    public class PostBLL : IPostBLL
     {
         private readonly IPost _postDAL;
         public PostBLL()
@@ -69,6 +70,7 @@ namespace AnonForum.BLL
             {
                 listPostsDto.Add(new PostDTO
                 {
+                    PostID = post.PostID,
                     UserID = post.UserID,
                     Title = post.Title,
                     PostText = post.PostText,
@@ -105,6 +107,7 @@ namespace AnonForum.BLL
             var post = _postDAL.GetPostbyTitleandUsername(title,username);
             if (post != null)
             {
+                postDto.PostID = post.PostID;
                 postDto.UserID = post.UserID;
                 postDto.Title = post.Title;
                 postDto.PostText = post.PostText;
@@ -119,24 +122,43 @@ namespace AnonForum.BLL
             }
             return postDto;
         }
-        public bool LikePost(int userID, int postID)
+        public bool GetLikePost(int postID, int userID)
         {
             try
             {
-                bool result;
-                int like = (int)_postDAL.LikePost(userID, postID);
-                if (like != 0) {
-                    result = true;
-                } else
-                {
-                    result = false;
-                }
-                return result;
+                return _postDAL.GetLike(postID, userID);
             }
             catch (Exception ex)
             {
                 throw new ArgumentException(ex.Message);
             }
+        }
+        public void LikePost(int postID, int userID)
+        {
+            _postDAL.LikePost(postID, userID);
+        }
+        public void UnlikePost(int postID, int userID)
+        {
+            _postDAL.UnlikePost(postID, userID);
+        }
+        public bool GetDislikePost(int postID, int userID)
+        {
+            try
+            {
+                return _postDAL.GetDislike(postID, userID);
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException(ex.Message);
+            }
+        }
+        public void DislikePost(int postID, int userID)
+        {
+            _postDAL.DislikePost(postID, userID);
+        }
+        public void UndislikePost(int postID, int userID)
+        {
+            _postDAL.UndislikePost(postID, userID);
         }
     }
 }

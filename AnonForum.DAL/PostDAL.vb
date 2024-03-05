@@ -71,7 +71,7 @@ Public Class PostDAL
             If dr.HasRows Then
                 dr.Read()
                 resPost.UserID = CInt(dr("UserID"))
-                resPost.PostID = dr("PostID").ToString()
+                resPost.PostID = CInt(dr("PostID"))
                 resPost.Title = dr("Title").ToString()
                 resPost.PostText = dr("PostText").ToString()
                 resPost.TimeStamp = dr("TimeStamp").ToString()
@@ -210,8 +210,7 @@ Public Class PostDAL
             conn.Close()
         End Try
     End Function
-    Public Function LikePost(ByVal userID As Integer, ByVal postID As Integer) Implements IPost.LikePost
-        Dim status As Integer
+    Public Sub LikePost(ByVal postID As Integer, ByVal userID As Integer) Implements IPost.LikePost
         Using conn As New SqlConnection(strConn)
             Dim strSql As String = "DECLARE	@return_value int
                 EXEC	@return_value = [dbo].[LikePostSP]
@@ -223,17 +222,88 @@ Public Class PostDAL
             cmd.Parameters.AddWithValue("@postID", postID)
             conn.Open()
             Dim dr As SqlDataReader = cmd.ExecuteReader()
-
-            If dr.HasRows Then
-                dr.Read()
-                status = CInt(dr("Status"))
-            End If
-
-            dr.Close()
             cmd.Dispose()
             conn.Close()
         End Using
-
-        Return status
+    End Sub
+    Public Sub UnlikePost(ByVal postID As Integer, ByVal userID As Integer) Implements IPost.UnlikePost
+        Using conn As New SqlConnection(strConn)
+            Dim strSql As String = "delete from LikePost where PostID = @postID and UserID = @userID"
+            Dim cmd As New SqlCommand(strSql, conn)
+            cmd.Parameters.AddWithValue("@userID", userID)
+            cmd.Parameters.AddWithValue("@postID", postID)
+            conn.Open()
+            Dim dr As SqlDataReader = cmd.ExecuteReader()
+            cmd.Dispose()
+            conn.Close()
+        End Using
+    End Sub
+    Public Function GetLike(ByVal postID As Integer, ByVal userID As Integer) As Boolean Implements IPost.GetLike
+        Try
+            Dim res As Boolean
+            Dim strSql = "select * from LikePost where PostID = @postID and UserID = @userID"
+            conn = New SqlConnection(strConn)
+            cmd = New SqlCommand(strSql, conn)
+            cmd.Parameters.AddWithValue("@postID", postID)
+            cmd.Parameters.AddWithValue("@userID", userID)
+            conn.Open()
+            dr = cmd.ExecuteReader()
+            res = dr.HasRows
+            dr.Close()
+            Return res
+        Catch ex As Exception
+            Throw
+        Finally
+            cmd.Dispose()
+            conn.Close()
+        End Try
+    End Function
+    Public Sub DislikePost(ByVal postID As Integer, ByVal userID As Integer) Implements IPost.DislikePost
+        Using conn As New SqlConnection(strConn)
+            Dim strSql As String = "DECLARE	@return_value int
+                EXEC	@return_value = [dbo].[UnlikePostSP]
+		                @userID
+                        ,@postID
+                SELECT	'Return Value' = @return_value"
+            Dim cmd As New SqlCommand(strSql, conn)
+            cmd.Parameters.AddWithValue("@userID", userID)
+            cmd.Parameters.AddWithValue("@postID", postID)
+            conn.Open()
+            Dim dr As SqlDataReader = cmd.ExecuteReader()
+            cmd.Dispose()
+            conn.Close()
+        End Using
+    End Sub
+    Public Sub UndislikePost(ByVal postID As Integer, ByVal userID As Integer) Implements IPost.UndislikePost
+        Using conn As New SqlConnection(strConn)
+            Dim strSql As String = "delete from UnlikePost where PostID = @postID and UserID = @userID"
+            Dim cmd As New SqlCommand(strSql, conn)
+            cmd.Parameters.AddWithValue("@userID", userID)
+            cmd.Parameters.AddWithValue("@postID", postID)
+            conn.Open()
+            Dim dr As SqlDataReader = cmd.ExecuteReader()
+            cmd.Dispose()
+            conn.Close()
+        End Using
+    End Sub
+    Public Function GetDislike(ByVal postID As Integer, ByVal userID As Integer) As Boolean Implements IPost.GetDislike
+        Try
+            Dim res As Boolean
+            Dim strSql = "select * from UnlikePost where PostID = @postID and UserID = @userID"
+            conn = New SqlConnection(strConn)
+            cmd = New SqlCommand(strSql, conn)
+            cmd.Parameters.AddWithValue("@postID", postID)
+            cmd.Parameters.AddWithValue("@userID", userID)
+            conn.Open()
+            dr = cmd.ExecuteReader()
+            res = dr.HasRows
+            dr.Close()
+            Return res
+        Catch ex As Exception
+            Throw
+        Finally
+            cmd.Dispose()
+            conn.Close()
+        End Try
     End Function
 End Class

@@ -22,7 +22,6 @@ Public Class _Default
     End Function
 
     Protected Sub postRepeater_ItemCommand(source As Object, e As RepeaterCommandEventArgs) Handles postRepeater.ItemCommand
-
     End Sub
 
 End Class

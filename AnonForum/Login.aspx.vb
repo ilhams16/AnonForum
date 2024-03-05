@@ -1,4 +1,5 @@
-﻿Imports AnonForum.DAL
+﻿Imports System.Web.Configuration
+Imports AnonForum.DAL
 Public Class Login
     Inherits Page
     Dim dal As New UserDAL()
@@ -19,10 +20,8 @@ Public Class Login
         Dim result = False
         Dim user = dal.UserLogin(username, password)
         result = True
+        Session("CurrentUsername") = user.Username
+        Session("CurrentUserID") = user.UserID
         Return result
     End Function
-
-    Protected Sub btnRegister_Click(sender As Object, e As EventArgs) Handles btnRegister.Click
-        Response.Redirect("/Register")
-    End Sub
 End Class

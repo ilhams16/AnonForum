@@ -7,5 +7,6 @@ Public Interface IUser
     Function EditNickname(username As String, Nickname As String)
     Function DeleteUser(username As String)
     Function GetbyUsername(username As String) As UserAuth
+    Function GetbyID(id As Integer) As UserAuth
 
 End Interface

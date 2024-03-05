@@ -139,6 +139,25 @@ namespace AnonForum.BLL
             }
             return userDto;
         }
+        public UserDTO GetUserbyID(int id)
+        {
+            UserDTO userDto = new UserDTO();
+            var user = _userDAL.GetbyID(id);
+            if (user != null)
+            {
+                userDto.UserID = user.UserID;
+                userDto.Username = user.Username;
+                userDto.Email = user.Email;
+                userDto.Password = user.Password;
+                userDto.Nickname = user.Nickname;
+                userDto.UserImage = user.UserImage;
+            }
+            else
+            {
+                throw new ArgumentException($"User id {id} not found");
+            }
+            return userDto;
+        }
 
 
 
