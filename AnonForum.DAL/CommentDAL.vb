@@ -9,8 +9,7 @@ Public Class CommentDAL
     Private dr As SqlDataReader
 
     Public Sub New()
-        strConn = "Server=.\BSISqlExpress;Database=AnonForum;Trusted_Connection=True;"
-        conn = New SqlConnection(strConn)
+        strConn = Helper.GetConnectionString()
     End Sub
     Public Function GetAllCommentbyPostID(postID As Integer) As IEnumerable(Of Comment) Implements IComment.GetAllCommentbyPostID
         Dim comments As New List(Of Comment)

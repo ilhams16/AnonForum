@@ -1,0 +1,25 @@
+﻿@{
+	ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+<table class="table table-striped">
+	<tr>
+		<th>Category ID</th>
+		<th>Category Name</th>
+		<th>&nbsp;</th>
+		<th>&nbsp;</th>
+	</tr>
+	@foreach (var post in Model)
+	{
+		<tr>
+			<td>@post.PostID</td>
+			<td>@post.Title</td>
+			<td><a href="/Categories/Edit/@post.PostID" class="btn btn-warning btn-sm">edit</a></td>
+			<td>
+				<a href="/Categories/Delete/@post.PostID" class="btn btn-danger btn-sm">delete</a>
+			</td>
+		</tr>
+	}
+</table>
+

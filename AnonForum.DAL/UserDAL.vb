@@ -1,7 +1,7 @@
 Imports AnonForum.BO
-Imports System.Configuration
 Imports System.Data
 Imports System.Data.SqlClient
+Imports Microsoft.Extensions.Configuration
 
 Public Class UserDAL
     Implements IUser
@@ -13,7 +13,7 @@ Public Class UserDAL
 
 
     Public Sub New()
-        strConn = New SqlConnection(ConfigurationManager.AppSettings.Get("MyDbConnectionString")).ConnectionString
+        strConn = Helper.GetConnectionString()
     End Sub
 
     Public Function GetAll() As IEnumerable(Of UserAuth) Implements IUser.GetAllUser
