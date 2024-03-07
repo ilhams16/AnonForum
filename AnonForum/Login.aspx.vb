@@ -1,8 +1,14 @@
 ﻿Imports System.Web.Configuration
-Imports AnonForum.DAL
+Imports AnonForum.BLL
+Imports AnonForum.BLL.DTOs.User
+Imports AnonForum.BLL.[Interface]
 Public Class Login
     Inherits Page
-    Dim dal As New UserDAL()
+    Private ReadOnly _userBLL As IUserBLL
+    Dim currentUserID As Integer
+    Public Sub New()
+        _userBLL = New UserBLL()
+    End Sub
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As EventArgs) Handles Me.Load
 
@@ -18,10 +24,14 @@ Public Class Login
     End Sub
     Protected Function IsValidUser(username As String, password As String) As Boolean
         Dim result = False
-        Dim user = dal.UserLogin(username, password)
+        Dim user As New UserLoginDTO
+        user.UsernameOrEmail = username
+        user.Password = password
+        Dim userLogin = _userBLL.UserLogin(user)
+        currentUserID = userLogin.UserID
         result = True
-        Session("CurrentUsername") = user.Username
-        Session("CurrentUserID") = user.UserID
+        Session("CurrentUsername") = userLogin.Username
+        Session("CurrentUserID") = userLogin.UserID
         Return result
     End Function
 End Class

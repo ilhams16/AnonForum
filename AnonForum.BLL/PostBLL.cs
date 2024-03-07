@@ -17,7 +17,7 @@ namespace AnonForum.BLL
             _postDAL = new PostDAL();
         }
 
-        public string AddNewPost(CreatePostDTO entity)
+        public void AddNewPost(CreatePostDTO entity)
         {
             if (string.IsNullOrEmpty(entity.Title))
             {
@@ -38,23 +38,40 @@ namespace AnonForum.BLL
                     PostCategoryID = entity.PostCategoryID,
 
                 };
-                return (string)_postDAL.AddNewPost(newPost);
+                _postDAL.AddNewPost(newPost);
             }
             catch (Exception ex)
             {
                 throw new ArgumentException(ex.Message);
             }
         }
-        public string DeletePost(string title, int userID)
+        public PostDTO GetPostbyID(int postID)
         {
-            if (title.Length <= 0)
+            PostDTO postDto = new PostDTO();
+            var post = _postDAL.GetPostbyID(postID);
+            if (post != null)
             {
-                throw new ArgumentException("Title is required");
+                postDto.PostID = post.PostID;
+                postDto.UserID = post.UserID;
+                postDto.Title = post.Title;
+                postDto.PostText = post.PostText;
+                postDto.PostCategoryID = post.PostCategoryID;
+                postDto.TotalLikes = post.TotalDislikes;
+                postDto.TotalDislikes = post.TotalDislikes;
+                postDto.Username = post.Username;
             }
+            else
+            {
+                throw new ArgumentException($"{post.PostID} not found");
+            }
+            return postDto;
+        }
+        public void DeletePost(int postID)
+        {
 
             try
             {
-                return (string)_postDAL.DeletePost(title,userID);
+                _postDAL.DeletePost(postID);
             }
             catch (Exception ex)
             {
@@ -101,32 +118,11 @@ namespace AnonForum.BLL
             }
             return listCategoriesDto;
         }
-        public PostDTO GetPostbyTitleandUsername(string title, string username)
-        {
-            PostDTO postDto = new PostDTO();
-            var post = _postDAL.GetPostbyTitleandUsername(title,username);
-            if (post != null)
-            {
-                postDto.PostID = post.PostID;
-                postDto.UserID = post.UserID;
-                postDto.Title = post.Title;
-                postDto.PostText = post.PostText;
-                postDto.PostCategoryID = post.PostCategoryID;
-                postDto.TotalLikes = post.TotalLikes;
-                postDto.TotalDislikes = post.TotalDislikes;
-                postDto.Username = post.Username;
-            }
-            else
-            {
-                throw new ArgumentException($"Post not found");
-            }
-            return postDto;
-        }
         public bool GetLikePost(int postID, int userID)
         {
             try
             {
-                return _postDAL.GetLike(postID, userID);
+                return (bool)_postDAL.GetLike(postID, userID);
             }
             catch (Exception ex)
             {
@@ -145,7 +141,7 @@ namespace AnonForum.BLL
         {
             try
             {
-                return _postDAL.GetDislike(postID, userID);
+                return (bool)_postDAL.GetDislike(postID, userID);
             }
             catch (Exception ex)
             {
@@ -159,6 +155,33 @@ namespace AnonForum.BLL
         public void UndislikePost(int postID, int userID)
         {
             _postDAL.UndislikePost(postID, userID);
+        }
+        public void EditPost(EditPostDTO entity, int postID)
+        {
+            if (string.IsNullOrEmpty(entity.Title))
+            {
+                throw new ArgumentException("Title is required");
+            }
+            else if (entity.Title.Length > 50)
+            {
+                throw new ArgumentException("Title max length is 50");
+            }
+
+            try
+            {
+                var newPost = new Post
+                {
+                    Title = entity.Title,
+                    PostText = entity.PostText,
+                    PostCategoryID = entity.PostCategoryID,
+
+                };
+                _postDAL.EditPost(postID,newPost);
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException(ex.Message);
+            }
         }
     }
 }

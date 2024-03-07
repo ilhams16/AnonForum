@@ -49,7 +49,7 @@ Public Class CommentDAL
             conn.Close()
         End Try
     End Function
-    Public Function GetCommentbyUserIDandPostID(ByVal userID As Integer, ByVal postID As Integer) As Comment Implements IComment.GetPostbyTitleandUsername
+    Public Function GetCommentbyUserIDandPostID(ByVal userID As Integer, ByVal postID As Integer) As Comment Implements IComment.GetCommentbyUserIDandPostID
         Try
             Dim resPost As New Comment
             Dim strSql = "select * from Comments c
@@ -82,6 +82,25 @@ Public Class CommentDAL
             conn.Close()
         End Try
     End Function
+    Public Sub CreateComment(comment As Comment) Implements IComment.AddNewComment
+        Using conn As New SqlConnection(strConn)
+            Dim strSql As String = "DECLARE	@return_value int
+                EXEC	@return_value = [dbo].[NewComment]
+		                @postID
+                        ,@userID
+                        ,@comment
+                SELECT	'Return Value' = @return_value"
+            Dim cmd As New SqlCommand(strSql, conn)
+            cmd.Parameters.AddWithValue("@postID", comment.PostID)
+            cmd.Parameters.AddWithValue("@userID", comment.UserID)
+            cmd.Parameters.AddWithValue("@comment", comment.Comment)
+            conn.Open()
+            Dim dr As SqlDataReader = cmd.ExecuteReader()
+            dr.Close()
+            cmd.Dispose()
+            conn.Close()
+        End Using
+    End Sub
     Public Sub LikeComment(ByVal commentID As Integer, ByVal postID As Integer, ByVal userID As Integer) Implements IComment.LikeComment
         Using conn As New SqlConnection(strConn)
             Dim strSql As String = "DECLARE	@return_value int

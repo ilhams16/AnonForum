@@ -1,5 +1,4 @@
 Imports AnonForum.BO
-Imports System.ComponentModel
 Imports System.Configuration
 Imports System.Data
 Imports System.Data.SqlClient

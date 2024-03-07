@@ -110,17 +110,7 @@ namespace AnonForum.BLL
             }
             return userDto;
         }
-
-        public UserAuth UserLogin(string usernameOrEmail, string password)
-        {
-            throw new NotImplementedException();
-        }
-
-        List<UserAuth> IUserBLL.GetUsers()
-        {
-            throw new NotImplementedException();
-        }
-        public UserDTO GetUserbyUsername(String username)
+        public UserDTO GetUserbyUsername(string username)
         {
             UserDTO userDto = new UserDTO();
             var user = _userDAL.GetbyUsername(username);

@@ -55,17 +55,16 @@ Public Class PostDAL
         End Try
     End Function
 
-    Public Function GetPostbyTitle(ByVal title As String, ByVal username As String) As Post Implements IPost.GetPostbyTitleandUsername
+    Public Function GetPostbyID(ByVal postID As Integer) As Post Implements IPost.GetPostbyID
         Try
             Dim resPost As New Post
             Dim strSql = "select * from Posts p
                             join UserAuth ua
                             on p.UserID = ua.UserID
-                            where p.Title = @title and ua.Username = @username"
+                            where p.PostID = @postID"
             conn = New SqlConnection(strConn)
             cmd = New SqlCommand(strSql, conn)
-            cmd.Parameters.AddWithValue("@title", title)
-            cmd.Parameters.AddWithValue("@username", username)
+            cmd.Parameters.AddWithValue("@postID", postID)
             conn.Open()
             dr = cmd.ExecuteReader()
             If dr.HasRows Then
@@ -90,8 +89,7 @@ Public Class PostDAL
         End Try
     End Function
 
-    Public Function CreatePost(post As Post) Implements IPost.AddNewPost
-        Dim status = ""
+    Public Sub CreatePost(post As Post) Implements IPost.AddNewPost
         Using conn As New SqlConnection(strConn)
             Dim strSql As String = "DECLARE	@return_value int
                 EXEC	@return_value = [dbo].[NewPost]
@@ -108,80 +106,46 @@ Public Class PostDAL
             conn.Open()
             Dim dr As SqlDataReader = cmd.ExecuteReader()
 
-            If dr.HasRows Then
-                dr.Read()
-                status = dr("Status")
-            End If
-
             dr.Close()
             cmd.Dispose()
             conn.Close()
         End Using
+    End Sub
 
-        Return status
-    End Function
-
-    Public Function EditPost(post As Post, newPost As Post) Implements IPost.EditPost
-        Dim status = ""
+    Public Sub EditPost(postID As Integer, newPost As Post) Implements IPost.EditPost
         Using conn As New SqlConnection(strConn)
             Dim strSql As String = "DECLARE	@return_value int
                 EXECUTE @return_value = [dbo].[EditPost] 
-                          @userID
-                          ,@title
-                          ,@postCategory
+                          @postID
+                          ,@newPostCategory
                           ,@newTitle
                           ,@newPostText
-                          ,@newPostCategory
                 SELECT	'Return Value' = @return_value"
             Dim cmd As New SqlCommand(strSql, conn)
-            cmd.Parameters.AddWithValue("@userID", post.UserID)
-            cmd.Parameters.AddWithValue("@title", post.Title)
-            cmd.Parameters.AddWithValue("@postCategory", post.PostCategoryID)
+            cmd.Parameters.AddWithValue("@postID", postID)
             cmd.Parameters.AddWithValue("@newTitle", newPost.Title)
             cmd.Parameters.AddWithValue("@newPostText", newPost.PostText)
             cmd.Parameters.AddWithValue("@newPostCategory", newPost.PostCategoryID)
             conn.Open()
             Dim dr As SqlDataReader = cmd.ExecuteReader()
-
-            If dr.HasRows Then
-                dr.Read()
-                status = dr("Message")
-            End If
-
             dr.Close()
             cmd.Dispose()
             conn.Close()
         End Using
+    End Sub
 
-        Return status
-    End Function
-
-    Public Function DeletePost(ByVal title As String, ByVal userID As Integer) Implements IPost.DeletePost
-        Dim status = ""
+    Public Sub DeletePost(postID As Integer) Implements IPost.DeletePost
         Using conn As New SqlConnection(strConn)
-            Dim strSql As String = "DECLARE	@return_value int
-                EXEC	@return_value = [dbo].[DeletePost]
-		                @title
-                        ,@userID
-                SELECT	'Return Value' = @return_value"
+            Dim strSql As String = "delete from Posts where PostID = @postID"
             Dim cmd As New SqlCommand(strSql, conn)
-            cmd.Parameters.AddWithValue("@title", title)
-            cmd.Parameters.AddWithValue("@userID", userID)
+            cmd.Parameters.AddWithValue("@postID", postID)
             conn.Open()
             Dim dr As SqlDataReader = cmd.ExecuteReader()
-
-            If dr.HasRows Then
-                dr.Read()
-                status = dr("Status")
-            End If
-
             dr.Close()
             cmd.Dispose()
             conn.Close()
         End Using
-
-        Return status
-    End Function
+    End Sub
     Public Function GetAllCategories() As List(Of Category) Implements IPost.GetAllCategories
         Dim categories As New List(Of Category)
         Try
