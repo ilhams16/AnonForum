@@ -60,7 +60,7 @@ Public Class UserDAL
             Using conn As New SqlConnection(strConn)
                 Dim strSql = "SELECT * FROM dbo.UserAuth where UserID=@id"
                 Dim cmd As New SqlCommand(strSql, conn)
-                cmd.Parameters.AddWithValue("@username", id)
+                cmd.Parameters.AddWithValue("@id", id)
                 conn.Open()
                 Dim dr As SqlDataReader = cmd.ExecuteReader()
 

@@ -25,9 +25,11 @@ Public Class _Default
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As EventArgs) Handles Me.Load
         If Not (IsPostBack) Then
-            Dim posts = GetPostsFromDatabase()
-            postRepeater.DataSource = posts
-            postRepeater.DataBind()
+            ViewState("CurrentPage") = 1 ' Set the initial page number in ViewState
+            BindData(1)
+            'Dim posts = GetPostsFromDatabase()
+            'postRepeater.DataSource = posts
+            'postRepeater.DataBind()
             BindCategories()
             If (Context.User.Identity.IsAuthenticated) Then
                 isLogin.Visible = True
@@ -45,6 +47,44 @@ Public Class _Default
         Return posts
     End Function
 
+    Private Sub BindData(ByVal pageNumber As Integer)
+        Dim data = GetDataForPage(pageNumber)
+
+        postRepeater.DataSource = data
+        postRepeater.DataBind()
+    End Sub
+
+    Private Function GetDataForPage(ByVal pageNumber As Integer)
+        Dim allData As IEnumerable(Of PostDTO) = GetPostsFromDatabase()
+        Dim pageSize As Integer = 2 ' Set your desired page size
+        Dim skip As Integer = (pageNumber - 1) * pageSize
+        Dim pageData As IEnumerable(Of PostDTO) = allData.Skip(skip).Take(pageSize).ToList()
+
+        Return pageData
+    End Function
+    Protected Sub btnNextPage_Click(sender As Object, e As EventArgs)
+        Dim currentPage As Integer = ViewState("CurrentPage") ' Get the current page number from ViewState
+        Dim nextPage As Integer = currentPage + 1 ' Increment the current page number to navigate to the next page
+        Dim maxPage As Integer = postRepeater.Items.Count
+        If currentPage = maxPage Then
+            BindData(currentPage) ' Bind data for the next page
+            ViewState("CurrentPage") = currentPage ' Update the current page number in ViewState
+        Else
+            BindData(nextPage) ' Bind data for the next page
+            ViewState("CurrentPage") = nextPage ' Update the current page number in ViewState
+        End If
+    End Sub
+    Protected Sub btnPreviousPage_Click(sender As Object, e As EventArgs)
+        Dim currentPage As Integer = ViewState("CurrentPage") ' Get the current page number from ViewState
+        If currentPage >= 1 Then
+            Dim previousPage As Integer = currentPage - 1 ' Decrement the current page number to navigate to the previous page
+            BindData(previousPage) ' Bind data for the previous page
+            ViewState("CurrentPage") = previousPage ' Update the current page number in ViewState
+        Else
+            BindData(currentPage)
+            ViewState("CurrentPage") = currentPage
+        End If
+    End Sub
     Protected Sub postRepeater_ItemCommand(source As Object, e As RepeaterCommandEventArgs) Handles postRepeater.ItemCommand
         Dim userID As Integer = CInt(DirectCast(e.Item.FindControl("UserID"), Label).Text)
         Dim postID As Integer = CInt(DirectCast(e.Item.FindControl("PostID"), Label).Text)
@@ -59,7 +99,7 @@ Public Class _Default
             Else
                 _postBLL.LikePost(postID, currentUserID)
             End If
-            Response.Redirect("/", True)
+            Response.Redirect(Request.Url.AbsoluteUri)
         ElseIf e.CommandName = "dislikePost" Then
             Dim dislikeBtn = _postBLL.GetDislikePost(postID, currentUserID)
             If dislikeBtn Then
@@ -67,7 +107,7 @@ Public Class _Default
             Else
                 _postBLL.DislikePost(postID, currentUserID)
             End If
-            Response.Redirect("/", True)
+            Response.Redirect(Request.Url.AbsoluteUri)
         ElseIf e.CommandName = "deletePost" Then
             _postBLL.DeletePost(postID)
             Response.Redirect("/", True)

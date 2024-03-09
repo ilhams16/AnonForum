@@ -1,11 +1,10 @@
-﻿<%@ Page Title="Home Page" Language="VB" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Default.aspx.vb" Inherits="AnonForum._Default" %>
+﻿<%@ Page Title="Home Page" Language="VB" MasterPageFile="~/Site.Master" EnableViewState="true" AutoEventWireup="true" CodeBehind="Default.aspx.vb" Inherits="AnonForum._Default" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
     <main class="p-5">
         <div visible="false" runat="server" id="isLogin" class="d-block justify-content-center align-content-center">
             <div class="d-flex justify-content-center">
                 <h4 class="col-9">Welcome <%: Context.User.Identity.Name %></h4>
-                <asp:Label runat="server" ID="testLabel" Text="test"></asp:Label>
                 <div class="col-3 justify-content-end align-content-end mx-auto">
                     <asp:Button ID="btnLogout" runat="server" Text="Logout" OnClick="btnLogout_Click" CssClass="form-control btn btn-danger" />
                 </div>
@@ -47,8 +46,11 @@
                                 <asp:Label ID="UserID" runat="server" Visible="false" Text='<%# Eval("UserID") %>'></asp:Label>
                             </div>
                             <div class="m-3">
-                                <h3 class="text-center">
-                                    <asp:Label ID="Title" CssClass="text-center" runat="server" Text='<%# Eval("Title") %>'></asp:Label></h3>
+                                <a href='<%# "Detail.aspx?postID=" + Server.UrlEncode(Eval("PostID").ToString()) %>' class="text-center">
+                                    <h3 class="text-center">
+                                        <asp:Label ID="TitleLabel" CssClass="text-center" runat="server" Text='<%# Eval("Title") %>'></asp:Label>
+                                    </h3>
+                                </a>
                                 <asp:Label ID="PostID" runat="server" Visible="false" Text='<%# Eval("PostID") %>'></asp:Label>
                                 <p class="text-start" style="font-size: larger;"><%# Eval("PostText") %></p>
 
@@ -149,6 +151,10 @@
                         </div>
                     </ItemTemplate>
                 </asp:Repeater>
+                <div class="d-flex">
+                    <asp:Button ID="btnPreviousPage" runat="server" Text="Previous Page" OnClick="btnPreviousPage_Click" CssClass="m-2" />
+                    <asp:Button ID="btnNextPage" runat="server" Text="Next Page" OnClick="btnNextPage_Click" CssClass="m-2" />
+                </div>
                 <!-- JavaScript to control modal -->
                 <script>
                     function showModal(index) {

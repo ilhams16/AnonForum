@@ -14,130 +14,103 @@ Option Explicit On
 Partial Public Class _Detail
 
     '''<summary>
-    '''Title control.
+    '''Test control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents Title As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents Test As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
-    '''PostID control.
+    '''lblTitle control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents PostID As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents lblTitle As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
-    '''btnLike control.
+    '''lblPostID control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents btnLike As Global.System.Web.UI.WebControls.Button
+    Protected WithEvents lblPostID As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
-    '''btnDislike control.
+    '''lblPost control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents btnDislike As Global.System.Web.UI.WebControls.Button
+    Protected WithEvents lblPost As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
-    '''Username control.
+    '''btnLikePost control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents Username As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents btnLikePost As Global.System.Web.UI.WebControls.Button
 
     '''<summary>
-    '''UserID control.
+    '''lblTotalLikes control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents UserID As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents lblTotalLikes As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
-    '''Label1 control.
+    '''btnDislikePost control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents Label1 As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents btnDislikePost As Global.System.Web.UI.WebControls.Button
 
     '''<summary>
-    '''CommentID control.
+    '''lblDislikePost control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents CommentID As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents lblDislikePost As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
-    '''btnLikeComment control.
+    '''commentRepeater control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents btnLikeComment As Global.System.Web.UI.WebControls.Button
+    Protected WithEvents commentRepeater As Global.System.Web.UI.WebControls.Repeater
 
     '''<summary>
-    '''btnDislikeComment control.
+    '''lblTimeStamp control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents btnDislikeComment As Global.System.Web.UI.WebControls.Button
+    Protected WithEvents lblTimeStamp As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
-    '''btnDelete control.
+    '''btnDeletePost control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents btnDelete As Global.System.Web.UI.WebControls.Button
-
-    '''<summary>
-    '''txtComment control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents txtComment As Global.System.Web.UI.WebControls.TextBox
-
-    '''<summary>
-    '''btnPostComment control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents btnPostComment As Global.System.Web.UI.WebControls.Button
-
-    '''<summary>
-    '''Button1 control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents Button1 As Global.System.Web.UI.WebControls.Button
+    Protected WithEvents btnDeletePost As Global.System.Web.UI.WebControls.Button
 
     '''<summary>
     '''showEdit control.
