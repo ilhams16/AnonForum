@@ -10,4 +10,5 @@
     Public Property TotalDislikes As Integer
     Public Property Username As String
     Public Property CategoryName As String
+    Public Property UserImage As String
 End Class

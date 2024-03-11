@@ -1,4 +1,5 @@
 ﻿Imports System.Data.SqlClient
+Imports System.Text
 Imports AnonForum.BO
 
 Public Class PostDAL
@@ -36,10 +37,12 @@ Public Class PostDAL
                         .PostText = dr("PostText").ToString(),
                         .TimeStamp = DirectCast(dr("TimeStamp"), Date),
                         .PostCategoryID = CInt(dr("PostCategoryID")),
+                        .Image = dr("Image").ToString(),
                         .TotalLikes = CInt(dr("TotalLikes")),
                         .TotalDislikes = CInt(dr("TotalDislikes")),
                         .Username = dr("Username").ToString(),
-                        .CategoryName = dr("Name").ToString()
+                        .CategoryName = dr("Name").ToString(),
+                        .UserImage = dr("UserImage").ToString()
                     }
                     Posts.Add(post)
                 End While
@@ -75,9 +78,11 @@ Public Class PostDAL
                 resPost.PostText = dr("PostText").ToString()
                 resPost.TimeStamp = dr("TimeStamp").ToString()
                 resPost.PostCategoryID = CInt(dr("PostCategoryID"))
+                resPost.Image = dr("Image").ToString()
                 resPost.TotalLikes = CInt(dr("TotalLikes"))
                 resPost.TotalDislikes = CInt(dr("TotalDislikes"))
                 resPost.Username = dr("Username").ToString()
+                resPost.UserImage = dr("UserImage").ToString()
             End If
             dr.Close()
             Return resPost
@@ -97,12 +102,14 @@ Public Class PostDAL
                         ,@title
                         ,@post
                         ,@postCategoryID
+,@image
                 SELECT	'Return Value' = @return_value"
             Dim cmd As New SqlCommand(strSql, conn)
             cmd.Parameters.AddWithValue("@userID", post.UserID)
             cmd.Parameters.AddWithValue("@title", post.Title)
             cmd.Parameters.AddWithValue("@post", post.PostText)
             cmd.Parameters.AddWithValue("@postCategoryID", post.PostCategoryID)
+            cmd.Parameters.AddWithValue("@image", post.Image)
             conn.Open()
             Dim dr As SqlDataReader = cmd.ExecuteReader()
 
@@ -136,7 +143,11 @@ Public Class PostDAL
 
     Public Sub DeletePost(postID As Integer) Implements IPost.DeletePost
         Using conn As New SqlConnection(strConn)
-            Dim strSql As String = "delete from Posts where PostID = @postID"
+            Dim strSql As String = "DECLARE	@return_value int
+EXEC	@return_value = [dbo].[DeletePost]
+		@postID
+SELECT	'Return Value' = @return_value
+GO"
             Dim cmd As New SqlCommand(strSql, conn)
             cmd.Parameters.AddWithValue("@postID", postID)
             conn.Open()

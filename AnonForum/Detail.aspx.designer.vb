@@ -14,13 +14,40 @@ Option Explicit On
 Partial Public Class _Detail
 
     '''<summary>
-    '''Test control.
+    '''lblcurrentUserID control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents Test As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents lblcurrentUserID As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''UserImage control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents UserImage As Global.System.Web.UI.WebControls.Image
+
+    '''<summary>
+    '''Username control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents Username As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''UserID control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents UserID As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
     '''lblTitle control.
@@ -48,6 +75,15 @@ Partial Public Class _Detail
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents lblPost As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''PostImage control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents PostImage As Global.System.Web.UI.WebControls.Image
 
     '''<summary>
     '''btnLikePost control.

@@ -9,7 +9,7 @@ namespace AnonForum.BLL.Interface
     {
         IEnumerable<CommentDTO> GetAllCommentbyPostID(int postID);
         void AddNewComment(CreateCommentDTO entity);
-        void DeleteComment(int commentID, int postID, int userID);
+        void DeleteComment(int commentID);
         CommentDTO GetCommentbyUserIDandPostID(int userID, int postID);
         bool GetLike(int commentID, int postID, int userID);
         bool GetDislike(int commentID, int postID, int userID);

@@ -1,4 +1,5 @@
 ﻿Imports System.ComponentModel
+Imports System.IO
 Imports System.Runtime.InteropServices
 Imports AnonForum.BLL
 Imports AnonForum.BLL.DTOs.Comment
@@ -26,7 +27,7 @@ Public Class _Default
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As EventArgs) Handles Me.Load
         If Not (IsPostBack) Then
             ViewState("CurrentPage") = 1 ' Set the initial page number in ViewState
-            BindData(1)
+            BindData(ViewState("CurrentPage"))
             'Dim posts = GetPostsFromDatabase()
             'postRepeater.DataSource = posts
             'postRepeater.DataBind()
@@ -49,14 +50,13 @@ Public Class _Default
 
     Private Sub BindData(ByVal pageNumber As Integer)
         Dim data = GetDataForPage(pageNumber)
-
         postRepeater.DataSource = data
         postRepeater.DataBind()
     End Sub
 
     Private Function GetDataForPage(ByVal pageNumber As Integer)
         Dim allData As IEnumerable(Of PostDTO) = GetPostsFromDatabase()
-        Dim pageSize As Integer = 2 ' Set your desired page size
+        Dim pageSize As Integer = 10 ' Set your desired page size
         Dim skip As Integer = (pageNumber - 1) * pageSize
         Dim pageData As IEnumerable(Of PostDTO) = allData.Skip(skip).Take(pageSize).ToList()
 
@@ -94,35 +94,37 @@ Public Class _Default
         Dim cat As Integer = CInt(DirectCast(e.Item.FindControl("ddlEditCategories"), DropDownList).Text)
         If e.CommandName = "likePost" Then
             Dim likeBtn = _postBLL.GetLikePost(postID, currentUserID)
-            If likeBtn Then
-                _postBLL.UnlikePost(postID, currentUserID)
+            If (Context.User.Identity.IsAuthenticated) Then
+                If likeBtn Then
+                    _postBLL.UnlikePost(postID, currentUserID)
+                Else
+                    _postBLL.LikePost(postID, currentUserID)
+                End If
+                Response.Redirect(Request.Url.AbsoluteUri)
             Else
-                _postBLL.LikePost(postID, currentUserID)
+                Response.Redirect("/Login")
             End If
-            Response.Redirect(Request.Url.AbsoluteUri)
         ElseIf e.CommandName = "dislikePost" Then
             Dim dislikeBtn = _postBLL.GetDislikePost(postID, currentUserID)
-            If dislikeBtn Then
-                _postBLL.UndislikePost(postID, currentUserID)
+            If (Context.User.Identity.IsAuthenticated) Then
+                If dislikeBtn Then
+                    _postBLL.UndislikePost(postID, currentUserID)
+                Else
+                    _postBLL.DislikePost(postID, currentUserID)
+                End If
+                Response.Redirect(Request.Url.AbsoluteUri)
             Else
-                _postBLL.DislikePost(postID, currentUserID)
+                Response.Redirect("/Login")
             End If
-            Response.Redirect(Request.Url.AbsoluteUri)
         ElseIf e.CommandName = "deletePost" Then
             _postBLL.DeletePost(postID)
             Response.Redirect("/", True)
-        ElseIf e.CommandName = "btnComment" Then
-            If Visible Then
-                Visible = False
-            Else
-                Visible = True
-            End If
         ElseIf e.CommandName = "editPost" Then
             Dim edit As New EditPostDTO With {
-                .Title = title,
-                .PostText = post,
-                .PostCategoryID = cat
-            }
+            .Title = title,
+            .PostText = post,
+            .PostCategoryID = cat
+        }
             _postBLL.EditPost(edit, editPostID)
             Response.Redirect("/", True)
         End If
@@ -167,6 +169,19 @@ Public Class _Default
         post.PostText = txtPostText.Text
         post.Title = txtTitle.Text
         post.PostCategoryID = CInt(ddlCategories.Text)
+        Dim fileName As String = Guid.NewGuid().ToString() + Path.GetExtension(fileImage.FileName)
+
+        ' Specify the directory to save the uploaded file
+        Dim uploadDirectory As String = Server.MapPath("~/PostImages/")
+
+        ' Create the directory if it doesn't exist
+        If Not Directory.Exists(uploadDirectory) Then
+            Directory.CreateDirectory(uploadDirectory)
+        End If
+
+        ' Save the uploaded file to the server
+        fileImage.SaveAs(Path.Combine(uploadDirectory, fileName))
+        post.Image = fileName
         _postBLL.AddNewPost(post)
         Response.Redirect("/")
     End Sub
@@ -190,8 +205,6 @@ Public Class _Default
         dislikeButton.CssClass = If(dislikeBtn, "btn-danger btn form-control", "btn-secondary btn form-control")
         likeButton.Text = If(likeBtn, "Unlike", "Like")
         dislikeButton.Text = If(dislikeBtn, "Undislike", "Dislike")
-
-
         If e.Item.ItemType = ListItemType.Item OrElse e.Item.ItemType = ListItemType.AlternatingItem Then
             Dim deleteButton As Button = DirectCast(e.Item.FindControl("btnDelete"), Button)
             If Context.User.Identity.Name.Trim() = username.Trim() Then
@@ -206,32 +219,46 @@ Public Class _Default
         Dim commentID As Integer = CInt(DirectCast(e.Item.FindControl("CommentID"), Label).Text)
         Dim postID As Integer = CInt(DirectCast(e.Item.FindControl("PostID"), Label).Text)
         Dim comment As String = DirectCast(e.Item.FindControl("txtComment"), TextBox).Text
+        Dim test As Label = DirectCast(e.Item.FindControl("test"), Label)
         If e.CommandName = "likeComment" Then
             Dim likeBtn = _comBLL.GetLike(commentID, postID, currentUserID)
-            If likeBtn Then
-                _comBLL.UnlikeComment(commentID, postID, currentUserID)
+            If (Context.User.Identity.IsAuthenticated) Then
+                If likeBtn Then
+                    _comBLL.UnlikeComment(commentID, postID, currentUserID)
+                Else
+                    _comBLL.LikeComment(commentID, postID, currentUserID)
+                End If
+                Response.Redirect("/", True)
             Else
-                _comBLL.LikeComment(commentID, postID, currentUserID)
+                Response.Redirect("/Login")
             End If
-            Response.Redirect("/", True)
         ElseIf e.CommandName = "dislikeComment" Then
             Dim dislikeBtn = _comBLL.GetDislike(commentID, postID, currentUserID)
-            If dislikeBtn Then
-                _comBLL.UndislikeComment(commentID, postID, currentUserID)
+            If (Context.User.Identity.IsAuthenticated) Then
+                If dislikeBtn Then
+                    _comBLL.UndislikeComment(commentID, postID, currentUserID)
+                Else
+                    _comBLL.DislikeComment(commentID, postID, currentUserID)
+                End If
+                Response.Redirect("/", True)
             Else
-                _comBLL.DislikeComment(commentID, postID, currentUserID)
+                Response.Redirect("/Login")
             End If
-            Response.Redirect("/", True)
         ElseIf e.CommandName = "deleteComment" Then
-            _comBLL.DeleteComment(commentID, postID, currentUserID)
+            _comBLL.DeleteComment(commentID)
             Response.Redirect("/", True)
         ElseIf e.CommandName = "postComment" Then
-            Dim newComment As New CreateCommentDTO
-            newComment.PostID = postID
-            newComment.UserID = currentUserID
-            newComment.Comment = comment
-            _comBLL.AddNewComment(newComment)
-            Response.Redirect("/", True)
+            If (Context.User.Identity.IsAuthenticated) Then
+                Dim newComment As New CreateCommentDTO With {
+                .PostID = postID,
+                .UserID = currentUserID,
+                .Comment = comment
+            }
+                _comBLL.AddNewComment(newComment)
+                Response.Redirect("/", True)
+            Else
+                Response.Redirect("/Login")
+            End If
         End If
     End Sub
 End Class

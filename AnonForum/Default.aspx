@@ -41,19 +41,23 @@
                     <ItemTemplate>
                         <div class="rounded-2 bg-light p-3 border-bottom border-2 mt-1">
                             <div class="d-flex align-items-center justify-content-start">
-                                <img src="Assets/user.png" class="img rounded-circle" width="20" height="20" alt="User Profile Image" />
-                                <asp:Label ID="Username" CssClass="ms-2" runat="server" Text='<%# Eval("Username") %>'></asp:Label>
+                                <asp:Image runat="server" ImageUrl='<%# "~/UserImages/" & Eval("UserImage") %>' ID="UserImage" class="img rounded-circle" Width="20" Height="20" alt="User Profile Image" /><asp:Label ID="Username" CssClass="ms-2" runat="server" Text='<%# Eval("Username") %>'></asp:Label>
                                 <asp:Label ID="UserID" runat="server" Visible="false" Text='<%# Eval("UserID") %>'></asp:Label>
                             </div>
                             <div class="m-3">
-                                <a href='<%# "Detail.aspx?postID=" + Server.UrlEncode(Eval("PostID").ToString()) %>' class="text-center">
-                                    <h3 class="text-center">
+                                <h3 class="text-center">
+                                    <a href='<%# "Detail.aspx?postID=" + Server.UrlEncode(Eval("PostID").ToString()) %>' class="text-center" style="text-decoration: none;">
                                         <asp:Label ID="TitleLabel" CssClass="text-center" runat="server" Text='<%# Eval("Title") %>'></asp:Label>
-                                    </h3>
-                                </a>
+                                    </a>
+                                </h3>
                                 <asp:Label ID="PostID" runat="server" Visible="false" Text='<%# Eval("PostID") %>'></asp:Label>
                                 <p class="text-start" style="font-size: larger;"><%# Eval("PostText") %></p>
-
+                                <asp:Image runat="server"
+                                    ID="PostImage"
+                                    CssClass="img-fluid"
+                                    Visible='<%# Not String.IsNullOrEmpty(Eval("Image").ToString()) %>'
+                                    ImageUrl='<%# If(Not String.IsNullOrEmpty(Eval("Image").ToString()), "~/PostImages/" & Eval("Image"), String.Empty) %>'
+                                    Style="display: block; margin: 0 auto;" />
                             </div>
                             <div class="d-block">
                                 <div class="d-flex align-items-center justify-content-start m-3">
@@ -70,9 +74,9 @@
                                 </div>
                                 <asp:Repeater ID="commentRepeater" runat="server" OnItemDataBound="commentRepeater_ItemDataBound" OnItemCommand="commentRepeater_ItemCommand">
                                     <ItemTemplate>
-                                        <div class="rounded-2 bg-light p-3 border-bottom border-2 m-2">
+                                        <div class="rounded-2 bg-light p-3 border-bottom border-2 m-2 ms-4">
                                             <div class="my-1">
-                                                <img src="Assets/user.png" class="img rounded-circle" width="20" height="20" alt="User Profile Image" />
+                                                <asp:Image runat="server" ImageUrl='<%# "~/UserImages/" & Eval("UserImage") %>' ID="UserImage" class="img rounded-circle" Width="20" Height="20" alt="User Profile Image" />
                                                 <asp:Label ID="Username" CssClass="ms-2" runat="server" Text='<%# Eval("Username") %>'></asp:Label>
                                                 <asp:Label ID="UserID" Visible="false" CssClass="ms-2" runat="server" Text='<%# Eval("UserID") %>'></asp:Label>
                                                 <asp:Label ID="PostID" Visible="false" CssClass="ms-2" runat="server" Text='<%# DataBinder.Eval(Container.Parent.Parent, "DataItem.PostID") %>'></asp:Label>
@@ -83,8 +87,8 @@
                                                     <asp:Button ID="btnDislikeComment" Width="100" runat="server" Text="Dislike" CommandName="dislikeComment" /><h5 class="text-center mx-2 btn"><%# Eval("TotalDislikes") %></h5>
                                                 </div>
                                             </div>
-                                            <p class="text-muted"><%# Eval("TimeStamp", "{0:MM/dd/yyyy/hh:mm}") %></p>
-                                            <asp:Button runat="server" ID="btnDelete" Text="Delete" CssClass="btn btn-danger" />
+                                            <p class="text-muted"><%# Eval("TimeStamp", "{0:dddd, dd MMMM yyyy hh:mm}") %></p>
+                                            <asp:Button runat="server" ID="btnDelete" CommandName="deleteComment" Text="Delete" CssClass="btn btn-danger" />
                                         </div>
                                         <!-- Modal Comment-->
                                         <div class="modal fade" id="myCommentModal<%# Container.ItemIndex %>" tabindex="-1" aria-labelledby="commentModalLabel" aria-hidden="true">
@@ -95,6 +99,8 @@
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body">
+                                                        <asp:Label ID="modalPostID" runat="server" Visible="true" Text='<%# Eval("PostID") %>'></asp:Label>
+                                                        <asp:Label ID="test" runat="server" Visible="true"></asp:Label>
                                                         <div class="justify-content-start align-content-start my-3">
                                                             <asp:TextBox ID="txtComment" runat="server" TextMode="MultiLine" Rows="4" Columns="50" CssClass="form-control mx-auto" placeholder="Comment..."></asp:TextBox>
                                                             <div>
@@ -110,7 +116,7 @@
                             </div>
                             <div class="d-flex justify-content-between align-items-center text-end my-2">
                                 <!-- Published on -->
-                                <p class="text-muted mb-0">Published on: <%# Eval("TimeStamp", "{0:MM/dd/yyyy/hh:mm}") %></p>
+                                <p class="text-muted mb-0">Published on: <%# Eval("TimeStamp", "{0:dddd, dd MMMM yyyy hh:mm}") %></p>
 
                                 <!-- Delete button -->
                                 <asp:Button runat="server" ID="btnDelete" Text="Delete" CssClass="btn btn-danger ms-auto me-1" CommandName="deletePost" />

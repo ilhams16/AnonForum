@@ -36,6 +36,7 @@ namespace AnonForum.BLL
                     Title = entity.Title,
                     PostText = entity.PostText,
                     PostCategoryID = entity.PostCategoryID,
+                    Image = entity.Image,
 
                 };
                 _postDAL.AddNewPost(newPost);
@@ -56,9 +57,12 @@ namespace AnonForum.BLL
                 postDto.Title = post.Title;
                 postDto.PostText = post.PostText;
                 postDto.PostCategoryID = post.PostCategoryID;
+                postDto.Image = post.Image;
+                postDto.TimeStamp = post.TimeStamp;
                 postDto.TotalLikes = post.TotalDislikes;
                 postDto.TotalDislikes = post.TotalDislikes;
                 postDto.Username = post.Username;
+                postDto.UserImage = post.UserImage;
             }
             else
             {
@@ -92,9 +96,12 @@ namespace AnonForum.BLL
                     Title = post.Title,
                     PostText = post.PostText,
                     PostCategoryID = post.PostCategoryID,
+                    Image = post.Image,
+                    TimeStamp = post.TimeStamp,
                     TotalLikes = post.TotalLikes,
                     TotalDislikes = post.TotalDislikes,
                     Username = post.Username,
+                    UserImage = post.UserImage,
                 });
             }
             return listPostsDto;

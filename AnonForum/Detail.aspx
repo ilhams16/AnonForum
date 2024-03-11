@@ -2,13 +2,22 @@
 
 
 <asp:Content ID="DetailContent" ContentPlaceHolderID="MainContent" runat="server">
-    <div>
-        <asp:Label runat="server" ID="Test"></asp:Label>
-        <h3>
-            <asp:Label ID="lblTitle" CssClass="text-center" runat="server"></asp:Label></h3>
+    <div class="rounded-2 bg-light p-3 border-bottom border-2 mt-1">
+        <asp:Label ID="lblcurrentUserID" runat="server" Visible="false" ></asp:Label>
+        <div class="d-flex align-items-center justify-content-start">
+            <asp:Image runat="server" ID="UserImage" class="img rounded-circle" Width="20" Height="20" alt="User Profile Image" /><asp:Label ID="Username" CssClass="ms-2" runat="server"></asp:Label>
+            <asp:Label ID="UserID" runat="server" Visible="false" ></asp:Label>
+        </div>
+        <h3 class="text-center">
+            <asp:Label ID="lblTitle" CssClass="text-center" runat="server"></asp:Label>
+        </h3>
         <asp:Label ID="lblPostID" runat="server" Visible="false"></asp:Label>
         <p id="txtPost" class="text-start" style="font-size: larger;">
             <asp:Label ID="lblPost" runat="server"></asp:Label>
+            <asp:Image runat="server"
+                ID="PostImage"
+                CssClass="img-fluid"
+                Style="display: block; margin: 0 auto;" />
         </p>
     </div>
     <div class="d-block">
@@ -31,11 +40,11 @@
         <ItemTemplate>
             <div class="rounded-2 bg-light p-3 border-bottom border-2 m-2">
                 <div class="my-1">
-                    <img src="Assets/user.png" class="img rounded-circle" width="20" height="20" alt="User Profile Image" />
+                    <asp:Image runat="server" ImageUrl='<%# "~/UserImages/" & Eval("UserImage") %>' ID="UserImage" class="img rounded-circle" Width="20" Height="20" alt="User Profile Image" />
                     <asp:Label ID="commUsername" CssClass="ms-2" runat="server" Text='<%# Eval("Username") %>'></asp:Label>
                     <asp:Label ID="commUserID" Visible="false" CssClass="ms-2" runat="server" Text='<%# Eval("UserID") %>'></asp:Label>
                     <p class="text-start m-2"><%# Eval("Comment") %></p>
-                    <asp:Label id="commCommentID" runat="server" Visible="false" Text='<%# Eval("CommentID") %>'></asp:Label>
+                    <asp:Label ID="commCommentID" runat="server" Visible="false" Text='<%# Eval("CommentID") %>'></asp:Label>
                     <div class="d-flex align-items-center justify-content-start m-3">
                         <asp:Button ID="btnLikeComment" Width="100" runat="server" Text="Like" CommandName="likeComment" /><h5 class="text-center mx-2 btn"><%# Eval("TotalLikes") %></h5>
                         <asp:Button ID="btnDislikeComment" Width="100" runat="server" Text="Dislike" CommandName="dislikeComment" /><h5 class="text-center mx-2 btn"><%# Eval("TotalDislikes") %></h5>

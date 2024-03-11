@@ -25,23 +25,32 @@ Public Class _Detail
                 Dim postID As Integer = CInt(Request.QueryString("postID").ToString())
                 Dim item As PostDTO = GetPostsFromDatabase(postID)
                 Dim comments = _commBLL.GetAllCommentbyPostID(postID)
-                Dim username = ""
-                If currentUserID <> 0 Then
-                    username = _userBLL.GetUserbyID(currentUserID).Username
-                End If
+                'Dim username = ""
+                'If currentUserID <> 0 Then
+                '    username = _userBLL.GetUserbyID(currentUserID).Username
+                'End If
                 commentRepeater.DataSource = comments
                 commentRepeater.DataBind()
+                lblcurrentUserID.Text = currentUserID
+                UserID.Text = item.UserID
+                Username.Text = item.Username
                 lblTitle.Text = item.Title
                 lblPostID.Text = item.PostID
                 lblPost.Text = item.PostText
                 lblTotalLikes.Text = item.TotalLikes
                 lblDislikePost.Text = item.TotalDislikes
                 lblTimeStamp.Text = item.TimeStamp
+                UserImage.ImageUrl = "~/UserImages/" & item.UserImage
+                If item.Image Is Nothing Then
+                    PostImage.Visible = False
+                Else
+                    PostImage.ImageUrl = "~/PostImages/" & item.Image
+                End If
                 Dim likeBtn = _postBLL.GetLikePost(postID, currentUserID)
                 btnLikePost.CssClass = If(likeBtn, "btn btn-primary form-control", "btn btn-secondary form-control")
                 Dim dislikeBtn = _postBLL.GetDislikePost(postID, currentUserID)
                 btnDislikePost.CssClass = If(dislikeBtn, "btn btn-danger form-control", "btn btn-secondary form-control")
-                If Context.User.Identity.Name.Trim() = username.Trim() Then
+                If Context.User.Identity.Name.Trim() = Username.Text.Trim() Then
                     btnDeletePost.Visible = True
                     showEdit.Text = "<button type='button' class='btn btn-info' onclick='showModal'>Edit</button>"
                 Else
@@ -100,7 +109,7 @@ Public Class _Detail
             End If
             Response.Redirect("/", True)
         ElseIf e.CommandName = "deleteComment" Then
-            _commBLL.DeleteComment(commentID, postID, currentUserID)
+            _commBLL.DeleteComment(commentID)
             Response.Redirect("/", True)
         ElseIf e.CommandName = "postComment" Then
             Dim newComment As New CreateCommentDTO

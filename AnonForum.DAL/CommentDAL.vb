@@ -34,7 +34,8 @@ Public Class CommentDAL
                         .TimeStamp = DirectCast(dr("TimeStamp"), Date),
                         .TotalLikes = CInt(dr("TotalLikes")),
                         .TotalDislikes = CInt(dr("TotalDislikes")),
-                        .Username = dr("Username").ToString()
+                        .Username = dr("Username").ToString(),
+                        .UserImage = dr("UserImage").ToString()
                     }
                     comments.Add(comment)
                 End While
@@ -205,32 +206,18 @@ Public Class CommentDAL
             conn.Close()
         End Try
     End Function
-    Public Function DeleteComment(ByVal commentID As Integer, ByVal postID As Integer, ByVal userID As Integer) Implements IComment.DeleteComment
-        Dim status = ""
+    Public Sub DeleteComment(ByVal commentID As Integer) Implements IComment.DeleteComment
         Using conn As New SqlConnection(strConn)
             Dim strSql As String = "DECLARE	@return_value int
                 EXEC	@return_value = [dbo].[DeleteComment]
                         @commentID
-		                ,@postID
-                        ,@userID
                 SELECT	'Return Value' = @return_value"
             Dim cmd As New SqlCommand(strSql, conn)
             cmd.Parameters.AddWithValue("@commentID", commentID)
-            cmd.Parameters.AddWithValue("@postID", postID)
-            cmd.Parameters.AddWithValue("@userID", userID)
             conn.Open()
-            Dim dr As SqlDataReader = cmd.ExecuteReader()
-
-            If dr.HasRows Then
-                dr.Read()
-                status = dr("Status")
-            End If
-
-            dr.Close()
+            cmd.ExecuteReader()
             cmd.Dispose()
             conn.Close()
         End Using
-
-        Return status
-    End Function
+    End Sub
 End Class

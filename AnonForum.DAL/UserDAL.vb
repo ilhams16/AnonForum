@@ -32,7 +32,7 @@ Public Class UserDAL
                         .Username = dr("Username").ToString(),
                         .Email = dr("Email").ToString(),
                         .Nickname = dr("Nickname").ToString(),
-                        .UserImage = dr("UserImage")
+                        .UserImage = dr("UserImage").ToString()
                     }
                     'If Not (dr.IsDBNull("UserImage")) Then
                     '    ' Handle the case where UserImage is null

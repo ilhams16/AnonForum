@@ -34,7 +34,7 @@
                                 </div>
                                 <div class="form-outline form-white mb-4">
                                     <asp:TextBox runat="server" ID="Nickname" class="form-control form-control-lg text-bg-dark mx-auto" />
-                                    <label class="form-label" for="typeUsernameX">Username</label>
+                                    <label class="form-label" for="typeUsernameX">Nickname</label>
                                 </div>
                                 <div class="form-outline form-white mb-4">
                                     <asp:TextBox runat="server" TextMode="Password" ID="Password" class="form-control form-control-lg text-bg-dark mx-auto" />
@@ -47,10 +47,10 @@
                                 </div>
                                 <div class="form-outline form-white mb-4">
                                     <asp:FileUpload runat="server" ID="Image" placeholder="Image" class="form-control form-control-lg text-bg-dark mx-auto" />
-                                    <label class="form-label" for="typePasswordX">Image</label>
+                                    <label class="form-label">Image</label>
                                 </div>
 
-                                <asp:Button ID="btnRegister" class="btn btn-outline-light btn-lg px-5" runat="server" Text="Login" OnClick="btnRegister_Click" />
+                                <asp:Button ID="btnRegister" class="btn btn-outline-light btn-lg px-5" runat="server" Text="Register" OnClick="btnRegister_Click" />
 
                                 <div class="d-flex justify-content-center text-center mt-4 pt-1">
                                     <a href="#!" class="text-white"><i class="fab fa-facebook-f fa-lg"></i></a>
