@@ -13,4 +13,5 @@ Public Interface IPost
     Sub DeletePost(postID As Integer)
     Sub EditPost(postID As Integer, newPost As Post)
     Function GetPostbyID(postID As Integer) As Post
+    Function GetAllPostbyCategories(catID As Integer) As List(Of Post)
 End Interface

@@ -17,6 +17,7 @@ namespace AnonForum.BLL.DTOs.Post
         public int TotalDislikes { get; set; }
         public string Username { get; set; }
 		public string UserImage { get; set; }
+        public string CategoryName {  get; set; }
 
 	}
 }

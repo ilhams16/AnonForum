@@ -47,6 +47,11 @@
         </div>
         <section class="row" aria-labelledby="aspnetTitle">
             <div>
+                <div class="mx-5 mt-1">
+                    <label for="ddlCategory" class="text-white">Select Category:</label>
+                    <asp:DropDownList ID="ddlFilter" runat="server" AutoPostBack="true" DataTextField="Name" DataValueField="PostCategoryID" CssClass="form-control">
+                    </asp:DropDownList>
+                </div>
                 <asp:Repeater ID="postRepeater" runat="server" OnItemDataBound="postRepeater_ItemDataBound" OnItemCommand="postRepeater_ItemCommand">
                     <ItemTemplate>
                         <div class="rounded-2 bg-light p-3 border-bottom border-2 mt-1 mx-5">
@@ -126,8 +131,8 @@
                             </div>
                             <div class="d-flex justify-content-between align-items-center text-end my-2">
                                 <!-- Published on -->
-                                <p class="text-muted mb-0">Published on: <%# Eval("TimeStamp", "{0:dddd, dd MMMM yyyy hh:mm}") %></p>
-
+                                <p class="text-muted mb-0 mx-1">Published on: <%# Eval("TimeStamp", "{0:dddd, dd MMMM yyyy hh:mm}") %></p>
+                                <p class="text-muted mb-0 mx-1">Category: <%# Eval("CategoryName") %></p>
                                 <!-- Delete button -->
                                 <asp:Button runat="server" ID="btnDelete" Text="Delete" CssClass="btn btn-danger ms-auto me-1" CommandName="deletePost" />
 
@@ -157,7 +162,7 @@
                                             <asp:TextBox ID="newPost" runat="server" TextMode="MultiLine" Rows="4" Columns="50" CssClass="form-control mx-auto mt-1" Text='<%# Eval("PostText") %>'></asp:TextBox>
                                             <asp:Image runat="server"
                                                 ID="oldImage"
-                                                height="50"
+                                                Height="50"
                                                 CssClass="img-fluid"
                                                 Visible='<%# Not String.IsNullOrEmpty(Eval("Image").ToString()) %>'
                                                 ImageUrl='<%# If(Not String.IsNullOrEmpty(Eval("Image").ToString()), "~/PostImages/" & Eval("Image"), String.Empty) %>' />

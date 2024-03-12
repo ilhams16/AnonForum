@@ -19,8 +19,6 @@
     <webopt:BundleReference runat="server" Path="~/Content/css" />
     <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-
-
 </head>
 <body>
     <form id="form1" runat="server">
@@ -65,17 +63,8 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ms-auto align-items-center">
-                        <%--<li class="nav-item">
-                            <a class="nav-link mx-2" href="#!"><i class="fas fa-plus-circle pe-2"></i>Post</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link mx-2" href="#!"><i class="fas fa-bell pe-2"></i>Alerts</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link mx-2" href="#!"><i class="fas fa-heart pe-2"></i>Trips</a>
-                        </li>--%>
                         <li class="nav-item ms-3">
-                            <a class="btn btn-black btn-rounded" href="/Login">Sign in</a>
+                            <asp:Button ID="btnSignInOut" runat="server" CssClass="btn btn-black btn-rounded" OnClick="btnSignInOut_Click" />
                         </li>
                     </ul>
                 </div>

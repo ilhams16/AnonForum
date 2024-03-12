@@ -63,6 +63,7 @@ namespace AnonForum.BLL
                 postDto.TotalDislikes = post.TotalDislikes;
                 postDto.Username = post.Username;
                 postDto.UserImage = post.UserImage;
+                postDto.CategoryName = post.CategoryName;
             }
             else
             {
@@ -70,7 +71,8 @@ namespace AnonForum.BLL
             }
             return postDto;
         }
-        public void DeletePost(int postID)
+		
+		public void DeletePost(int postID)
         {
 
             try
@@ -102,12 +104,36 @@ namespace AnonForum.BLL
                     TotalDislikes = post.TotalDislikes,
                     Username = post.Username,
                     UserImage = post.UserImage,
-                });
+                    CategoryName = post.CategoryName
+			});
             }
             return listPostsDto;
         }
-
-        public IEnumerable<UserDTO> GetWithPaging(int pageNumber, int pageSize, string name)
+		public IEnumerable<PostDTO> GetAllPostsbyCategory(int catID)
+		{
+			List<PostDTO> listPostsDto = new List<PostDTO>();
+			var posts = _postDAL.GetAllPostbyCategories(catID);
+			foreach (var post in posts)
+			{
+				listPostsDto.Add(new PostDTO
+				{
+					PostID = post.PostID,
+					UserID = post.UserID,
+					Title = post.Title,
+					PostText = post.PostText,
+					PostCategoryID = post.PostCategoryID,
+					Image = post.Image,
+					TimeStamp = post.TimeStamp,
+					TotalLikes = post.TotalLikes,
+					TotalDislikes = post.TotalDislikes,
+					Username = post.Username,
+					UserImage = post.UserImage,
+					CategoryName = post.CategoryName
+				});
+			}
+			return listPostsDto;
+		}
+		public IEnumerable<UserDTO> GetWithPaging(int pageNumber, int pageSize, string name)
         {
             throw new NotImplementedException();
         }

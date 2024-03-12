@@ -57,6 +57,51 @@ Public Class PostDAL
             conn.Close()
         End Try
     End Function
+    Public Function GetAllPostbyCategories(ByVal catID As Integer) As List(Of Post) Implements IPost.GetAllPostbyCategories
+        Dim Posts As New List(Of Post)
+        Try
+            Dim strSql = "select * from Posts p
+                            join UserAuth ua
+                            on p.UserID = ua.UserID
+							join PostCategory pc
+							on p.PostCategoryID = pc.PostCategoryID
+                            where p.PostCategoryID = @postCategoryID
+							order by p.TimeStamp desc"
+
+            conn = New SqlConnection(strConn)
+            cmd = New SqlCommand(strSql, conn)
+            cmd.Parameters.AddWithValue("@postCategoryID", catID)
+            conn.Open()
+            dr = cmd.ExecuteReader()
+            If dr.HasRows Then
+                While dr.Read
+                    Dim post As New Post With {
+                        .UserID = CInt(dr("UserID")),
+                        .PostID = dr("PostID").ToString(),
+                        .Title = dr("Title").ToString(),
+                        .PostText = dr("PostText").ToString(),
+                        .TimeStamp = DirectCast(dr("TimeStamp"), Date),
+                        .PostCategoryID = CInt(dr("PostCategoryID")),
+                        .Image = dr("Image").ToString(),
+                        .TotalLikes = CInt(dr("TotalLikes")),
+                        .TotalDislikes = CInt(dr("TotalDislikes")),
+                        .Username = dr("Username").ToString(),
+                        .CategoryName = dr("Name").ToString(),
+                        .UserImage = dr("UserImage").ToString()
+                    }
+                    Posts.Add(post)
+                End While
+            End If
+            dr.Close()
+
+            Return Posts
+        Catch ex As Exception
+            Throw
+        Finally
+            cmd.Dispose()
+            conn.Close()
+        End Try
+    End Function
 
     Public Function GetPostbyID(ByVal postID As Integer) As Post Implements IPost.GetPostbyID
         Try

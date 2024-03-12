@@ -77,6 +77,15 @@ Partial Public Class _Default
     Protected WithEvents btnPost As Global.System.Web.UI.WebControls.Button
 
     '''<summary>
+    '''ddlFilter control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents ddlFilter As Global.System.Web.UI.WebControls.DropDownList
+
+    '''<summary>
     '''postRepeater control.
     '''</summary>
     '''<remarks>

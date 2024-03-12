@@ -26,15 +26,20 @@ Public Class _Default
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As EventArgs) Handles Me.Load
         If Not (IsPostBack) Then
+            BindCategories()
             ViewState("CurrentPage") = 1 ' Set the initial page number in ViewState
             BindData(ViewState("CurrentPage"))
-            'Dim posts = GetPostsFromDatabase()
-            'postRepeater.DataSource = posts
-            'postRepeater.DataBind()
-            BindCategories()
-            If (Context.User.Identity.IsAuthenticated) Then
+            If Context.User.Identity.IsAuthenticated Then
                 isLogin.Visible = True
             End If
+        End If
+    End Sub
+    Protected Sub ddlFilter_SelectedIndexChanged(ByVal sender As Object, ByVal e As EventArgs) Handles ddlFilter.SelectedIndexChanged
+        ViewState("CurrentPage") = 1 ' Reset the page number when filter changes
+        If CInt(ddlFilter.SelectedValue) = 0 Then
+            BindData(ViewState("CurrentPage"))
+        Else
+            BindDatabyCategory(ViewState("CurrentPage"), CInt(ddlFilter.SelectedValue))
         End If
     End Sub
     Protected Sub BindCategories()
@@ -42,20 +47,32 @@ Public Class _Default
         ddlCategories.DataSource = categories
         ddlCategories.DataBind()
         ddlCategories.Items.Insert(0, New ListItem("Select Category", "-1"))
+        ddlFilter.DataSource = categories
+        ddlFilter.DataBind()
+        ddlFilter.Items.Insert(0, New ListItem("All Category", "0"))
     End Sub
     Protected Function GetPostsFromDatabase()
         Dim posts = _postBLL.GetAllPosts()
         Return posts
     End Function
+    Protected Function GetPostsFromDatabasebyCategory(ByVal catID As Integer)
+        Dim posts = _postBLL.GetAllPostsbyCategory(catID)
+        Return posts
+    End Function
 
     Private Sub BindData(ByVal pageNumber As Integer)
-        Dim data = GetDataForPage(pageNumber)
+        Dim data = GetDataForPage(pageNumber, GetPostsFromDatabase())
+        postRepeater.DataSource = data
+        postRepeater.DataBind()
+    End Sub
+    Private Sub BindDatabyCategory(ByVal pageNumber As Integer, ByVal catID As Integer)
+        Dim data = GetDataForPage(pageNumber, GetPostsFromDatabasebyCategory(catID))
         postRepeater.DataSource = data
         postRepeater.DataBind()
     End Sub
 
-    Private Function GetDataForPage(ByVal pageNumber As Integer)
-        Dim allData As IEnumerable(Of PostDTO) = GetPostsFromDatabase()
+    Private Function GetDataForPage(ByVal pageNumber As Integer, ByVal dataBase As Object)
+        Dim allData As IEnumerable(Of PostDTO) = dataBase
         Dim pageSize As Integer = 10 ' Set your desired page size
         Dim skip As Integer = (pageNumber - 1) * pageSize
         Dim pageData As IEnumerable(Of PostDTO) = allData.Skip(skip).Take(pageSize).ToList()
