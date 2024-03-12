@@ -64,12 +64,12 @@ Public Class _Default
     End Function
     Protected Sub btnNextPage_Click(sender As Object, e As EventArgs)
         Dim currentPage As Integer = ViewState("CurrentPage") ' Get the current page number from ViewState
-        Dim nextPage As Integer = currentPage + 1 ' Increment the current page number to navigate to the next page
         Dim maxPage As Integer = postRepeater.Items.Count
         If currentPage = maxPage Then
             BindData(currentPage) ' Bind data for the next page
             ViewState("CurrentPage") = currentPage ' Update the current page number in ViewState
         Else
+            Dim nextPage As Integer = currentPage + 1 ' Increment the current page number to navigate to the next page
             BindData(nextPage) ' Bind data for the next page
             ViewState("CurrentPage") = nextPage ' Update the current page number in ViewState
         End If
@@ -153,12 +153,15 @@ Public Class _Default
         comment.DataBind()
         If e.Item.ItemType = ListItemType.Item OrElse e.Item.ItemType = ListItemType.AlternatingItem Then
             Dim deleteButton As Button = DirectCast(e.Item.FindControl("btnDelete"), Button)
-            Dim showEdit As Literal = DirectCast(e.Item.FindControl("showEdit"), Literal)
+            Dim editBtn As HtmlButton = DirectCast(e.Item.FindControl("editBtn"), HtmlButton)
+            'Dim showEdit As Literal = DirectCast(e.Item.FindControl("showEdit"), Literal)
             If Context.User.Identity.Name.Trim() = username.Trim() Then
                 deleteButton.Visible = True
-                showEdit.Text = "<button type='button' class='btn btn-info' onclick='showModal(" & "&" & "Container.ItemIndex" & "&" & ")'>Edit</button>"
+                'showEdit.Text = "<button type=" & "button" & "id=" & "editBtn" & "class=" & "btn btn-info" & "onclick='<%# " & "showModal(" & "& Container.ItemIndex & " & ")" & "%>'>Edit</button>"
+                editBtn.Visible = True
             Else
                 deleteButton.Visible = False
+                editBtn.Visible = False
             End If
         End If
     End Sub

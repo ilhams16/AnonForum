@@ -144,15 +144,13 @@ Public Class PostDAL
     Public Sub DeletePost(postID As Integer) Implements IPost.DeletePost
         Using conn As New SqlConnection(strConn)
             Dim strSql As String = "DECLARE	@return_value int
-EXEC	@return_value = [dbo].[DeletePost]
+EXECUTE	@return_value = [dbo].[DeletePost]
 		@postID
-SELECT	'Return Value' = @return_value
-GO"
+SELECT	'Return Value' = @return_value"
             Dim cmd As New SqlCommand(strSql, conn)
             cmd.Parameters.AddWithValue("@postID", postID)
             conn.Open()
-            Dim dr As SqlDataReader = cmd.ExecuteReader()
-            dr.Close()
+            cmd.ExecuteReader()
             cmd.Dispose()
             conn.Close()
         End Using
