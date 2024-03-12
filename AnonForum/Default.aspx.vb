@@ -28,7 +28,11 @@ Public Class _Default
         If Not (IsPostBack) Then
             BindCategories()
             ViewState("CurrentPage") = 1 ' Set the initial page number in ViewState
-            BindData(ViewState("CurrentPage"))
+            If Request.QueryString("query") IsNot Nothing Then
+                BindDatabySearch(ViewState("CurrentPage"), Request.QueryString("query").ToString())
+            Else
+                BindData(ViewState("CurrentPage"))
+            End If
             If Context.User.Identity.IsAuthenticated Then
                 isLogin.Visible = True
             End If
@@ -59,6 +63,10 @@ Public Class _Default
         Dim posts = _postBLL.GetAllPostsbyCategory(catID)
         Return posts
     End Function
+    Protected Function GetPostsFromDatabasebySearch(ByVal query As String)
+        Dim posts = _postBLL.GetAllPostsbySearch(query)
+        Return posts
+    End Function
 
     Private Sub BindData(ByVal pageNumber As Integer)
         Dim data = GetDataForPage(pageNumber, GetPostsFromDatabase())
@@ -67,6 +75,11 @@ Public Class _Default
     End Sub
     Private Sub BindDatabyCategory(ByVal pageNumber As Integer, ByVal catID As Integer)
         Dim data = GetDataForPage(pageNumber, GetPostsFromDatabasebyCategory(catID))
+        postRepeater.DataSource = data
+        postRepeater.DataBind()
+    End Sub
+    Private Sub BindDatabySearch(ByVal pageNumber As Integer, ByVal query As String)
+        Dim data = GetDataForPage(pageNumber, GetPostsFromDatabasebySearch(query))
         postRepeater.DataSource = data
         postRepeater.DataBind()
     End Sub

@@ -48,7 +48,7 @@
         <section class="row" aria-labelledby="aspnetTitle">
             <div>
                 <div class="mx-5 mt-1">
-                    <label for="ddlCategory" class="text-white">Select Category:</label>
+                    <label for="ddlCategory" class="text-white">Select Category :</label>
                     <asp:DropDownList ID="ddlFilter" runat="server" AutoPostBack="true" DataTextField="Name" DataValueField="PostCategoryID" CssClass="form-control">
                     </asp:DropDownList>
                 </div>

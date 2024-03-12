@@ -44,13 +44,14 @@
         <!-- Navbar -->
         <nav class="navbar navbar-expand-lg fixed-top bg-light navbar-light">
             <div class="container">
-                <a class="navbar-brand" href="/">
-                    <img
-                        id="MDB-logo"
-                        src="https://th.bing.com/th/id/OIP.TiJVGAjS5Z-XA6wT92YvTgHaDl?rs=1&pid=ImgDetMain"
-                        alt="MDB Logo"
+                <a class="navbar-brand d-flex align-content-center align-items-center" href="/">
+                    <asp:Image
+                        id="logo"
+                        runat="server"
+                        ImageUrl="~/discussion.png"
+                        alt="Logo"
                         draggable="false"
-                        height="30" /></a>
+                        height="30" CssClass="m-2" /><h2 class="m-2">AnonForum</h2></a>
                 <button
                     class="navbar-toggler"
                     type="button"
@@ -64,32 +65,18 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ms-auto align-items-center">
                         <li class="nav-item ms-3">
+                            <asp:TextBox ID="txtSearch" runat="server" CssClass="form-control" placeholder="Search Title..." />
+                        </li>
+                        <li class="nav-item ms-3">
+                            <asp:Button ID="btnSearch" runat="server" CssClass="btn btn-black btn-rounded" Text="Search" OnClick="btnSearch_Click" />
+                        </li>
+                        <li class="nav-item ms-3">
                             <asp:Button ID="btnSignInOut" runat="server" CssClass="btn btn-black btn-rounded" OnClick="btnSignInOut_Click" />
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
-        <!-- Navbar -->
-
-        <!-- Toggler -->
-
-        <%--<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
-            <div class="container">
-                <a class="navbar-brand" runat="server" href="~/">AnonForum</a>
-                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Toggle navigation" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item"><a class="nav-link" runat="server" href="~/">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" runat="server" href="~/Login">Login</a></li>
-                        <li class="nav-item"><a class="nav-link" runat="server" href="~/Contact">Contact</a></li>
-                    </ul>
-                </div>
-            </div>
-        </nav>--%>
         <div class="container body-content my-5">
             <asp:ContentPlaceHolder ID="MainContent" runat="server">
             </asp:ContentPlaceHolder>

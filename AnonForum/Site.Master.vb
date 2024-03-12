@@ -27,5 +27,11 @@
             btnSignInOut.Text = "Sign in"
         End If
     End Sub
+    Protected Sub btnSearch_Click(ByVal sender As Object, ByVal e As EventArgs) Handles btnSearch.Click
+        Dim searchQuery As String = txtSearch.Text.Trim()
+        If Not String.IsNullOrEmpty(searchQuery) Then
+            Response.Redirect("~/?query=" & HttpUtility.UrlEncode(searchQuery))
+        End If
+    End Sub
 
 End Class

@@ -133,6 +133,30 @@ namespace AnonForum.BLL
 			}
 			return listPostsDto;
 		}
+		public IEnumerable<PostDTO> GetAllPostsbySearch(string query)
+		{
+			List<PostDTO> listPostsDto = new List<PostDTO>();
+			var posts = _postDAL.GetAllPostbySearch(query);
+			foreach (var post in posts)
+			{
+				listPostsDto.Add(new PostDTO
+				{
+					PostID = post.PostID,
+					UserID = post.UserID,
+					Title = post.Title,
+					PostText = post.PostText,
+					PostCategoryID = post.PostCategoryID,
+					Image = post.Image,
+					TimeStamp = post.TimeStamp,
+					TotalLikes = post.TotalLikes,
+					TotalDislikes = post.TotalDislikes,
+					Username = post.Username,
+					UserImage = post.UserImage,
+					CategoryName = post.CategoryName
+				});
+			}
+			return listPostsDto;
+		}
 		public IEnumerable<UserDTO> GetWithPaging(int pageNumber, int pageSize, string name)
         {
             throw new NotImplementedException();
