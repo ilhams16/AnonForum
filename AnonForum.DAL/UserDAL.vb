@@ -175,6 +175,18 @@ Public Class UserDAL
 
         Return status
     End Function
+    Public Sub AddUserCommunity(commID As Integer, userID As Integer) Implements IUser.AddUserCommunity
+        Using conn As New SqlConnection(strConn)
+            Dim strSql As String = "insert into UserCommunity(CommunityID,UserID) values (@commID,@userID)"
+            Dim cmd As New SqlCommand(strSql, conn)
+            cmd.Parameters.AddWithValue("@commID", commID)
+            cmd.Parameters.AddWithValue("@userID", userID)
+            conn.Open()
+            cmd.ExecuteReader()
+            cmd.Dispose()
+            conn.Close()
+        End Using
+    End Sub
 
     Public Function EditNickname(ByVal username As String, ByVal nickname As String) Implements IUser.EditNickname
         Dim user As New UserAuth()

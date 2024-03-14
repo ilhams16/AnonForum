@@ -1,4 +1,4 @@
 ﻿Public Class Community
     Public Property CommunityID As Integer
-    Public Property ComunityName
+    Public Property ComunityName As String
 End Class

@@ -6,8 +6,7 @@ using AnonForum.BLL.DTOs.Post;
 
 namespace AnonForum.BLL.Interface
 {
-	public interface ICommunityBLL
+    public interface ICommunityBLL
 	{
-		AddNewUser(AddUserCommunityDTO addUserCommunityDTO);
 	}
 }
