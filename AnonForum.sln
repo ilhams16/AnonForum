@@ -9,7 +9,7 @@ Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "AnonForum.DAL", "AnonForum.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AnonForum.BLL", "AnonForum.BLL\AnonForum.BLL.csproj", "{02386FE7-296B-4AF2-87A2-A7DAA213080E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnonForum.MVC", "AnonForum.MVC\AnonForum.MVC.csproj", "{12B17C22-005F-4A2B-A112-0FF8B6A2ABDB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnonForum.MVC", "AnonForum.MVC\AnonForum.MVC.csproj", "{EDC85FE8-1A07-4E44-85DE-4D9F328E79DD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +29,10 @@ Global
 		{02386FE7-296B-4AF2-87A2-A7DAA213080E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{02386FE7-296B-4AF2-87A2-A7DAA213080E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{02386FE7-296B-4AF2-87A2-A7DAA213080E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{12B17C22-005F-4A2B-A112-0FF8B6A2ABDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{12B17C22-005F-4A2B-A112-0FF8B6A2ABDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{12B17C22-005F-4A2B-A112-0FF8B6A2ABDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{12B17C22-005F-4A2B-A112-0FF8B6A2ABDB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDC85FE8-1A07-4E44-85DE-4D9F328E79DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDC85FE8-1A07-4E44-85DE-4D9F328E79DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDC85FE8-1A07-4E44-85DE-4D9F328E79DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDC85FE8-1A07-4E44-85DE-4D9F328E79DD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

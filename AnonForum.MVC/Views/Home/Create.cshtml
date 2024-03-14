@@ -1,0 +1,69 @@
+﻿@model AnonForum.BLL.DTOs.User.CreateUserDTO
+
+@{
+	ViewBag.Title = "Create User";
+}
+
+<div class="container mt-5">
+	<div class="row justify-content-center">
+		<div class="col-md-6">
+			<div class="card">
+				<h5 class="card-header bg-primary text-white text-center">Create User</h5>
+				<div class="card-body">
+					<form method="post" enctype="multipart/form-data" asp-action="Create" asp-controller="Home" class="form-horizontal" role="form">
+						@Html.AntiForgeryToken()
+
+						<div class="form-group">
+							@Html.LabelFor(model => model.Username, htmlAttributes: new { @class = "control-label" })
+							@Html.TextBoxFor(model => model.Username, new { @class = "form-control" })
+							@Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger" })
+						</div>
+
+						<div class="form-group">
+							@Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label" })
+							@Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
+							@Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+						</div>
+
+						<div class="form-group">
+							@Html.LabelFor(model => model.Nickname, htmlAttributes: new { @class = "control-label" })
+							@Html.TextBoxFor(model => model.Nickname, new { @class = "form-control" })
+							@Html.ValidationMessageFor(model => model.Nickname, "", new { @class = "text-danger" })
+						</div>
+
+						<div class="form-group">
+							@Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label" })
+							@Html.PasswordFor(model => model.Password, new { @class = "form-control" })
+							@Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+						</div>
+
+						<div class="form-group">
+							@Html.LabelFor(model => model.ConfirmPassword, htmlAttributes: new { @class = "control-label" })
+							@Html.PasswordFor(model => model.ConfirmPassword, new { @class = "form-control" })
+							@Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
+						</div>
+
+						<div class="form-group">
+							@Html.LabelFor(model => model.UserImage, htmlAttributes: new { @class = "control-label" })
+							<input type="file" name="ImageFile" id="ImageFile" class="form-control-file" onchange="displayFileName(this)" />
+							@Html.TextBoxFor(model => model.ImageFile, new { @class = "form-control", @readonly = "readonly", @id = "fileNameTextBox" })
+							@Html.ValidationMessageFor(model => model.ImageFile, "", new { @class = "text-danger" })
+						</div>
+
+						<div class="form-group">
+							<button type="submit" class="btn btn-primary">Create</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	function displayFileName(input) {
+		if (input.files && input.files[0]) {
+			var fileName = input.files[0].name;
+			document.getElementById('fileNameTextBox').value = fileName;
+		}
+	}
+</script>

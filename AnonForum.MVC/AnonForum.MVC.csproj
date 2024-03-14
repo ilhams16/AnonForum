@@ -12,8 +12,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AnonForum.BLL\AnonForum.BLL.csproj" />
-    <ProjectReference Include="..\AnonForum.BO\AnonForum.BO.vbproj" />
-    <ProjectReference Include="..\AnonForum.DAL\AnonForum.DAL.vbproj" />
   </ItemGroup>
 
 </Project>

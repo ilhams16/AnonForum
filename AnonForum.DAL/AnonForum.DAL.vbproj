@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AnonForum.BO\AnonForum.BO.vbproj" />
+    <ProjectReference Include="..\AnonForum.BLL\AnonForum.BLL.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -15,7 +15,9 @@ namespace AnonForum.BLL.Interface
         void EditPost(EditPostDTO entity,int postID);
         IEnumerable<PostCategoryDTO> GetAllCategories();
         IEnumerable<PostDTO> GetAllPosts();
-        bool GetDislikePost(int postID, int userID);
+		IEnumerable<PostDTO> GetAllPostsbyCategory(int catID);
+		IEnumerable<PostDTO> GetAllPostsbySearch(string query);
+		bool GetDislikePost(int postID, int userID);
         bool GetLikePost(int postID, int userID);
         PostDTO GetPostbyID(int postID);
         void LikePost(int postID, int userID);

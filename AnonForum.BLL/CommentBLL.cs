@@ -31,7 +31,9 @@ namespace AnonForum.BLL
                     Comment = comment.Comment,
                     TotalLikes = comment.TotalLikes,
                     TotalDislikes = comment.TotalDislikes,
+                    TimeStamp = comment.TimeStamp,
                     Username = comment.Username,
+                    UserImage = comment.UserImage,
                 });
             }
             return listCommentsDto;
@@ -60,11 +62,11 @@ namespace AnonForum.BLL
             }
         }
 
-        public void DeleteComment(int commentID, int postID, int userID)
+        public void DeleteComment(int commentID)
         {
             try
             {
-                _commentDAL.DeleteComment(commentID, postID, userID);
+                _commentDAL.DeleteComment(commentID);
             }
             catch (Exception ex)
             { throw new ArgumentException(ex.Message); }
@@ -75,7 +77,7 @@ namespace AnonForum.BLL
             try
             {
                 CommentDTO comDto = new CommentDTO();
-                var com = _commentDAL.GetCommentbyUserIDandPostID(userID,postID);
+                var com = _commentDAL.GetCommentbyUserIDandPostID(userID, postID);
                 if (com != null)
                 {
                     comDto.CommentID = com.CommentID;
@@ -85,6 +87,7 @@ namespace AnonForum.BLL
                     comDto.TotalLikes = com.TotalDislikes;
                     comDto.TotalDislikes = com.TotalDislikes;
                     comDto.Username = com.Username;
+                    comDto.UserImage = com.UserImage;
                 }
                 else
                 {
@@ -94,7 +97,7 @@ namespace AnonForum.BLL
             }
             catch (Exception ex)
             {
-                throw new ArgumentException (ex.Message);
+                throw new ArgumentException(ex.Message);
             }
         }
 
@@ -104,9 +107,10 @@ namespace AnonForum.BLL
             {
                 bool res = _commentDAL.GetLike(commentID, postID, userID);
                 return res;
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
-                throw new ArgumentException (ex.Message);
+                throw new ArgumentException(ex.Message);
             }
         }
 
@@ -126,8 +130,9 @@ namespace AnonForum.BLL
         {
             try
             {
-                _commentDAL.LikeComment(commentID, postID, userID); 
-            } catch (Exception ex)
+                _commentDAL.LikeComment(commentID, postID, userID);
+            }
+            catch (Exception ex)
             {
                 throw new ArgumentException(ex.Message);
             }

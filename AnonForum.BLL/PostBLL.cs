@@ -36,6 +36,7 @@ namespace AnonForum.BLL
                     Title = entity.Title,
                     PostText = entity.PostText,
                     PostCategoryID = entity.PostCategoryID,
+                    Image = entity.Image,
 
                 };
                 _postDAL.AddNewPost(newPost);
@@ -56,9 +57,13 @@ namespace AnonForum.BLL
                 postDto.Title = post.Title;
                 postDto.PostText = post.PostText;
                 postDto.PostCategoryID = post.PostCategoryID;
+                postDto.Image = post.Image;
+                postDto.TimeStamp = post.TimeStamp;
                 postDto.TotalLikes = post.TotalDislikes;
                 postDto.TotalDislikes = post.TotalDislikes;
                 postDto.Username = post.Username;
+                postDto.UserImage = post.UserImage;
+                postDto.CategoryName = post.CategoryName;
             }
             else
             {
@@ -66,6 +71,7 @@ namespace AnonForum.BLL
             }
             return postDto;
         }
+
         public void DeletePost(int postID)
         {
 
@@ -92,14 +98,65 @@ namespace AnonForum.BLL
                     Title = post.Title,
                     PostText = post.PostText,
                     PostCategoryID = post.PostCategoryID,
+                    Image = post.Image,
+                    TimeStamp = post.TimeStamp,
                     TotalLikes = post.TotalLikes,
                     TotalDislikes = post.TotalDislikes,
                     Username = post.Username,
+                    UserImage = post.UserImage,
+                    CategoryName = post.CategoryName
                 });
             }
             return listPostsDto;
         }
-
+        public IEnumerable<PostDTO> GetAllPostsbyCategory(int catID)
+        {
+            List<PostDTO> listPostsDto = new List<PostDTO>();
+            var posts = _postDAL.GetAllPostbyCategories(catID);
+            foreach (var post in posts)
+            {
+                listPostsDto.Add(new PostDTO
+                {
+                    PostID = post.PostID,
+                    UserID = post.UserID,
+                    Title = post.Title,
+                    PostText = post.PostText,
+                    PostCategoryID = post.PostCategoryID,
+                    Image = post.Image,
+                    TimeStamp = post.TimeStamp,
+                    TotalLikes = post.TotalLikes,
+                    TotalDislikes = post.TotalDislikes,
+                    Username = post.Username,
+                    UserImage = post.UserImage,
+                    CategoryName = post.CategoryName
+                });
+            }
+            return listPostsDto;
+        }
+        public IEnumerable<PostDTO> GetAllPostsbySearch(string query)
+        {
+            List<PostDTO> listPostsDto = new List<PostDTO>();
+            var posts = _postDAL.GetAllPostbySearch(query);
+            foreach (var post in posts)
+            {
+                listPostsDto.Add(new PostDTO
+                {
+                    PostID = post.PostID,
+                    UserID = post.UserID,
+                    Title = post.Title,
+                    PostText = post.PostText,
+                    PostCategoryID = post.PostCategoryID,
+                    Image = post.Image,
+                    TimeStamp = post.TimeStamp,
+                    TotalLikes = post.TotalLikes,
+                    TotalDislikes = post.TotalDislikes,
+                    Username = post.Username,
+                    UserImage = post.UserImage,
+                    CategoryName = post.CategoryName
+                });
+            }
+            return listPostsDto;
+        }
         public IEnumerable<UserDTO> GetWithPaging(int pageNumber, int pageSize, string name)
         {
             throw new NotImplementedException();
@@ -176,7 +233,7 @@ namespace AnonForum.BLL
                     PostCategoryID = entity.PostCategoryID,
 
                 };
-                _postDAL.EditPost(postID,newPost);
+                _postDAL.EditPost(postID, newPost);
             }
             catch (Exception ex)
             {
@@ -185,3 +242,4 @@ namespace AnonForum.BLL
         }
     }
 }
+

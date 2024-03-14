@@ -4,7 +4,6 @@ using AnonForum.BLL.DTOs.User;
 using AnonForum.BLL.Interface;
 using AnonForum.BO;
 using AnonForum.DAL;
-using static Dapper.SqlMapper;
 
 namespace AnonForum.BLL
 {

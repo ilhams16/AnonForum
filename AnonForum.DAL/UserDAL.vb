@@ -32,15 +32,8 @@ Public Class UserDAL
                         .Username = dr("Username").ToString(),
                         .Email = dr("Email").ToString(),
                         .Nickname = dr("Nickname").ToString(),
-                        .UserImage = dr("UserImage")
+                        .UserImage = dr("UserImage").ToString()
                     }
-                    'If Not (dr.IsDBNull("UserImage")) Then
-                    '    ' Handle the case where UserImage is null
-                    '    ' For example, you can assign a default image or null to the UserImage property
-                    '    'user.UserImage =
-                    '    user.UserImage = System.Text.Encoding.Default.GetBytes("0x89504E470D0A1A0A0000000D4948445200000780000004380806000000E8D3C143000000017352474200AECE1CE900000004")
-                    'Else
-                    'End If
                     UserAuths.Add(user)
                 End While
             End If
@@ -60,7 +53,7 @@ Public Class UserDAL
             Using conn As New SqlConnection(strConn)
                 Dim strSql = "SELECT * FROM dbo.UserAuth where UserID=@id"
                 Dim cmd As New SqlCommand(strSql, conn)
-                cmd.Parameters.AddWithValue("@username", id)
+                cmd.Parameters.AddWithValue("@id", id)
                 conn.Open()
                 Dim dr As SqlDataReader = cmd.ExecuteReader()
 
@@ -175,6 +168,19 @@ Public Class UserDAL
 
         Return status
     End Function
+    Public Sub AddUserCommunity(communityID As Integer, userID As Integer) Implements IUser.AddUserCommunity
+        Using conn As New SqlConnection(strConn)
+            Dim strSql As String = "insert into UserCommunity(CommunityID,UserID) values (@communityID,@userID)"
+            Dim cmd As New SqlCommand(strSql, conn)
+            cmd.Parameters.AddWithValue("@communityID", communityID)
+            cmd.Parameters.AddWithValue("@userID", userID)
+            conn.Open()
+            cmd.ExecuteReader()
+            dr.Close()
+            cmd.Dispose()
+            conn.Close()
+        End Using
+    End Sub
 
     Public Function EditNickname(ByVal username As String, ByVal nickname As String) Implements IUser.EditNickname
         Dim user As New UserAuth()

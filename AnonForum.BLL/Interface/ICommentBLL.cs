@@ -9,7 +9,6 @@ namespace AnonForum.BLL.Interface
     {
         IEnumerable<CommentDTO> GetAllCommentbyPostID(int postID);
         void AddNewComment(CreateCommentDTO entity);
-        void DeleteComment(int commentID, int postID, int userID);
         CommentDTO GetCommentbyUserIDandPostID(int userID, int postID);
         bool GetLike(int commentID, int postID, int userID);
         bool GetDislike(int commentID, int postID, int userID);
@@ -17,5 +16,6 @@ namespace AnonForum.BLL.Interface
         void UnlikeComment(int commentID, int postID, int userID);
         void DislikeComment(int commentID, int postID, int userID);
         void UndislikeComment(int commentID, int postID, int userID);
+        void DeleteComment(int commentID);
     }
 }
