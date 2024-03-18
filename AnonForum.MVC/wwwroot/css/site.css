@@ -20,3 +20,26 @@ html {
 body {
   margin-bottom: 60px;
 }
+.slider-item {
+    margin: 0px 10px;
+}
+
+    .slider-item img {
+        width: 100%;
+    }
+
+.slider-item-content {
+    position: relative;
+}
+
+.slider-post-content {
+    position: absolute;
+    bottom: 38px;
+    padding: 20px;
+    background: #fff;
+    width: 90%;
+    text-align: center;
+    margin: 0 auto;
+    left: 0px;
+    right: 0px;
+}

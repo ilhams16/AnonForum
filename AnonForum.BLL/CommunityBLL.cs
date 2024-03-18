@@ -15,11 +15,21 @@ namespace AnonForum.BLL
 		{
 			_communityDAL = new CommunityDAL();
 		}
-		public IEnumerable<Community> GetAll()
+		public IEnumerable<CommunityDTO> GetAll()
 		{
 			try
 			{
-				return _communityDAL.GetAll();
+				var listComm = new List<CommunityDTO>();
+				var communities = _communityDAL.GetAll();
+				foreach ( var community in communities )
+				{
+					listComm.Add(new CommunityDTO()
+					{
+						CommunityID = community.CommunityID,
+						CommunityName = community.ComunityName,
+					});
+				}
+				return listComm;
 			}
 			catch (Exception ex)
 			{

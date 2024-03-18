@@ -25,16 +25,18 @@ namespace AnonForum.BLL
             {
                 listCommentsDto.Add(new CommentDTO
                 {
-                    CommentID = comment.CommentID,
-                    UserID = comment.UserID,
-                    PostID = comment.PostID,
+                    CommentID = (int)comment.CommentID,
+                    UserID = (int)comment.UserID,
+                    PostID = (int)comment.PostID,
                     Comment = comment.Comment,
                     TotalLikes = comment.TotalLikes,
                     TotalDislikes = comment.TotalDislikes,
-                    TimeStamp = comment.TimeStamp,
+                    TimeStamp = (DateTime)comment.TimeStamp,
                     Username = comment.Username,
                     UserImage = comment.UserImage,
-                });
+                    Likes = (List<int>)(_commentDAL.GetUserLike((int)comment.CommentID, (int)comment.PostID)),
+                    Dislikes = (List<int>)(_commentDAL.GetUserDislike((int)comment.CommentID, (int)comment.PostID))
+				});
             }
             return listCommentsDto;
         }
@@ -80,9 +82,9 @@ namespace AnonForum.BLL
                 var com = _commentDAL.GetCommentbyUserIDandPostID(userID, postID);
                 if (com != null)
                 {
-                    comDto.CommentID = com.CommentID;
-                    comDto.PostID = com.PostID;
-                    comDto.UserID = com.UserID;
+                    comDto.CommentID = (int)com.CommentID;
+                    comDto.PostID = (int)com.PostID;
+                    comDto.UserID = (int)com.UserID;
                     comDto.Comment = com.Comment;
                     comDto.TotalLikes = com.TotalDislikes;
                     comDto.TotalDislikes = com.TotalDislikes;

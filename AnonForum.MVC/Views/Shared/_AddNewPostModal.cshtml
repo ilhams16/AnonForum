@@ -1,0 +1,44 @@
+﻿@{
+}
+@model AnonForum.MVC.Models.CreatePostViewModel
+
+<div class="modal fade" id="addPostModal" tabindex="-1" role="dialog" aria-labelledby="addPostModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="addPostModalLabel">Add New Post</h5>
+				<button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<form method="post" enctype="multipart/form-data" asp-action="CreatePost" asp-controller="Home" class="form-horizontal" role="form">
+				<div class="modal-body">
+					<!-- Form for adding new post -->
+					@Html.AntiForgeryToken()
+					<div class="form-group">
+						@Html.LabelFor(model => model.createPostDTO.Title)
+						@Html.TextBoxFor(model => model.createPostDTO.Title, new { @class = "form-control my-1", id = "title" })
+					</div>
+					<div class="form-group">
+						@Html.LabelFor(model => model.createPostDTO.PostText)
+						@Html.TextAreaFor(model => model.createPostDTO.PostText, new { @class = "form-control my-1", id = "postText", rows = "3" })
+					</div>
+					<div class="form-group d-flex justify-content-between">
+						@Html.DropDownListFor(model => model.createPostDTO.PostCategoryID, new SelectList(Model.Categories, "PostCategoryID", "Name"), "Select Category", new { @class = "form-control my-1" })
+
+					</div>
+					<div class="form-group">
+						@Html.LabelFor(model => model.createPostDTO.Image)
+						@Html.TextBoxFor(model => model.createPostDTO.ImageFilePost, new { type = "file", @class = "form-control-file my-1" })
+					</div>
+
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+					<button type="submit" class="btn btn-primary">Submit</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+

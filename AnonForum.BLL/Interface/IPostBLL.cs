@@ -12,7 +12,7 @@ namespace AnonForum.BLL.Interface
         void AddNewPost(CreatePostDTO entity);
         void DeletePost(int postID);
         void DislikePost(int postID, int userID);
-        void EditPost(EditPostDTO entity,int postID);
+        void EditPost(EditPostDTO entity);
         IEnumerable<PostCategoryDTO> GetAllCategories();
         IEnumerable<PostDTO> GetAllPosts();
 		IEnumerable<PostDTO> GetAllPostsbyCategory(int catID);

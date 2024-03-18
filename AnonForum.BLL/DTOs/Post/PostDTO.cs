@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using AnonForum.BLL.DTOs.Comment;
+using AnonForum.BLL.DTOs.User;
 
 namespace AnonForum.BLL.DTOs.Post
 {
@@ -15,9 +17,10 @@ namespace AnonForum.BLL.DTOs.Post
         public int PostCategoryID { get; set; }
         public int TotalLikes { get; set; }
         public int TotalDislikes { get; set; }
-        public string Username { get; set; }
-		public string UserImage { get; set; }
-        public string CategoryName {  get; set; }
+        public PostCategoryDTO Category { get; set; }
+        public UserDTO UserPost { get; set; }
+        public List<int> Likes { get; set; }
+        public List<int> Dislikes { get; set; }
 
 	}
 }

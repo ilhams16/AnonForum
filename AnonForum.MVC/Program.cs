@@ -1,5 +1,6 @@
 using AnonForum.BLL;
 using AnonForum.BLL.Interface;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddTransient<IPostBLL, PostBLL>();
 builder.Services.AddTransient<IUserBLL, UserBLL>();
+builder.Services.AddTransient<ICommentBLL, CommentBLL>();
+builder.Services.AddTransient<ICommunityBLL, CommunityBLL>();
 
 builder.Services.AddSession(options =>
 {
@@ -30,7 +33,6 @@ app.UseStaticFiles();
 
 app.UseRouting();
 app.UseSession();
-
 app.UseAuthorization();
 
 app.MapControllerRoute(

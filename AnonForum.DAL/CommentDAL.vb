@@ -9,7 +9,7 @@ Public Class CommentDAL
     Private dr As SqlDataReader
 
     Public Sub New()
-        strConn = "Server=.\BSISqlExpress;Database=AnonForum;Trusted_Connection=True;"
+        strConn = Helper.GetConnectionString()
         conn = New SqlConnection(strConn)
     End Sub
     Public Function GetAllCommentbyPostID(postID As Integer) As IEnumerable(Of Comment) Implements IComment.GetAllCommentbyPostID
@@ -115,7 +115,7 @@ Public Class CommentDAL
             cmd.Parameters.AddWithValue("@userID", userID)
             cmd.Parameters.AddWithValue("@postID", postID)
             conn.Open()
-            Dim dr As SqlDataReader = cmd.ExecuteReader()
+            cmd.ExecuteReader()
             cmd.Dispose()
             conn.Close()
         End Using
@@ -147,6 +147,32 @@ Public Class CommentDAL
             res = dr.HasRows
             dr.Close()
             Return res
+        Catch ex As Exception
+            Throw
+        Finally
+            cmd.Dispose()
+            conn.Close()
+        End Try
+    End Function
+    Public Function GetUserLike(ByVal commentID As Integer, ByVal postID As Integer) As IEnumerable(Of Integer) Implements IComment.GetUserLike
+        Try
+            Dim listUser As New List(Of Integer)
+            Dim strSql = "select * from LikeComment where CommentID = @commentID and PostID = @postID"
+            conn = New SqlConnection(strConn)
+            cmd = New SqlCommand(strSql, conn)
+            cmd.Parameters.AddWithValue("@commentID", commentID)
+            cmd.Parameters.AddWithValue("@postID", postID)
+            conn.Open()
+            dr = cmd.ExecuteReader()
+            If dr.HasRows Then
+                While dr.Read()
+                    Dim userID = CInt(dr("UserID"))
+                    listUser.Add(userID)
+                End While
+            End If
+            dr.Close()
+
+            Return listUser
         Catch ex As Exception
             Throw
         Finally
@@ -206,7 +232,33 @@ Public Class CommentDAL
             conn.Close()
         End Try
     End Function
-    Public Sub DeleteComment(ByVal commentID As Integer) Implements IComment.DeleteComment
+    Public Function GetUserDislike(ByVal commentID As Integer, ByVal postID As Integer) As IEnumerable(Of Integer) Implements IComment.GetUserDislike
+        Try
+            Dim listUser As New List(Of Integer)
+            Dim strSql = "select * from UnlikeComment where CommentID = @commentID and PostID = @postID"
+            conn = New SqlConnection(strConn)
+            cmd = New SqlCommand(strSql, conn)
+            cmd.Parameters.AddWithValue("@commentID", commentID)
+            cmd.Parameters.AddWithValue("@postID", postID)
+            conn.Open()
+            dr = cmd.ExecuteReader()
+            If dr.HasRows Then
+                While dr.Read()
+                    Dim userID = CInt(dr("UserID"))
+                    listUser.Add(userID)
+                End While
+            End If
+            dr.Close()
+
+            Return listUser
+        Catch ex As Exception
+            Throw
+        Finally
+            cmd.Dispose()
+            conn.Close()
+        End Try
+    End Function
+    Public Sub DeleteComment(commentID As Integer) Implements IComment.DeleteComment
         Using conn As New SqlConnection(strConn)
             Dim strSql As String = "DECLARE	@return_value int
                 EXEC	@return_value = [dbo].[DeleteComment]

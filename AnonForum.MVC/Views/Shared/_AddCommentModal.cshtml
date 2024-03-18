@@ -1,0 +1,33 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@model AnonForum.BLL.DTOs.Comment.CreateCommentDTO
+
+<div class="modal fade" id="addCommentModal_@Model.PostID" tabindex="-1" role="dialog" aria-labelledby="addCommentModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="addCommentModalLabel">Add New Post</h5>
+				<button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<form method="post" enctype="multipart/form-data" asp-action="CreateComment" asp-controller="Home" class="form-horizontal" role="form">
+				<div class="modal-body">
+					<!-- Form for adding new post -->
+					@Html.AntiForgeryToken()
+					@Html.HiddenFor(model => model.PostID)
+					<div class="form-group">
+						@Html.LabelFor(model => model.Comment)
+						@Html.TextBoxFor(model => model.Comment, new { @class = "form-control", id = "comment", rows = "3" })
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+					<button type="submit" class="btn btn-primary">Submit</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

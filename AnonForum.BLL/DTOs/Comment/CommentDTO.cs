@@ -15,5 +15,7 @@ namespace AnonForum.BLL.DTOs.Comment
         public int? TotalDislikes { get; set; }
         public string Username { get; set; }
 		public string UserImage { get; set; }
+        public List<int> Likes { get; set; }
+        public List<int> Dislikes { get; set; }
 	}
 }

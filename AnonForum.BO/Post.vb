@@ -8,7 +8,6 @@
     Public Property PostCategoryID As Integer
     Public Property TotalLikes As Integer
     Public Property TotalDislikes As Integer
-    Public Property Username As String
-    Public Property CategoryName As String
-    Public Property UserImage As String
+    Public Property Category As Category
+    Public Property UserPost As UserAuth
 End Class

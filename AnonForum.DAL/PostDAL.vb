@@ -12,12 +12,15 @@ Public Class PostDAL
     Public Sub New()
         strConn = Helper.GetConnectionString()
         conn = New SqlConnection(strConn)
+
     End Sub
 
     Public Function GetAllPost() As List(Of Post) Implements IPost.GetAllPost
         Dim Posts As New List(Of Post)
         Try
-            Dim strSql = "select * from Posts p
+            Dim strSql = "select p.PostID, p.UserID, p.Title, p.PostText, p.TimeStamp, p.PostCategoryID, p.Image, p.TotalLikes, p.TotalDislikes, pc.PostCategoryID, pc.Name,
+ua.Username, ua.UserImage
+from Posts p
                             join UserAuth ua
                             on p.UserID = ua.UserID
 							join PostCategory pc
@@ -29,21 +32,26 @@ Public Class PostDAL
             conn.Open()
             dr = cmd.ExecuteReader()
             If dr.HasRows Then
-                While dr.Read
+                While dr.Read()
                     Dim post As New Post With {
-                        .UserID = CInt(dr("UserID")),
-                        .PostID = dr("PostID").ToString(),
-                        .Title = dr("Title").ToString(),
-                        .PostText = dr("PostText").ToString(),
-                        .TimeStamp = DirectCast(dr("TimeStamp"), Date),
-                        .PostCategoryID = CInt(dr("PostCategoryID")),
-                        .Image = dr("Image").ToString(),
-                        .TotalLikes = CInt(dr("TotalLikes")),
-                        .TotalDislikes = CInt(dr("TotalDislikes")),
-                        .Username = dr("Username").ToString(),
-                        .CategoryName = dr("Name").ToString(),
-                        .UserImage = dr("UserImage").ToString()
-                    }
+                    .UserID = CInt(dr("UserID")),
+                    .PostID = CInt(dr("PostID")),
+                    .Title = dr("Title").ToString(),
+                    .PostText = dr("PostText").ToString(),
+                    .TimeStamp = DirectCast(dr("TimeStamp"), Date),
+                    .PostCategoryID = CInt(dr("PostCategoryID")),
+                    .Image = dr("Image").ToString(),
+                    .TotalLikes = CInt(dr("TotalLikes")),
+                    .TotalDislikes = CInt(dr("TotalDislikes")),
+                    .Category = New Category With {
+                    .PostCategoryID = CInt(dr("PostCategoryID")),
+                    .Name = dr("Name").ToString()
+                    },
+                    .UserPost = New UserAuth With {
+                    .UserID = CInt(dr("UserID")),
+                    .Username = dr("Username").ToString(),
+                    .UserImage = dr("Userimage").ToString()
+                    }}
                     Posts.Add(post)
                 End While
             End If
@@ -60,7 +68,9 @@ Public Class PostDAL
     Public Function GetAllPostbyCategories(ByVal catID As Integer) As List(Of Post) Implements IPost.GetAllPostbyCategories
         Dim Posts As New List(Of Post)
         Try
-            Dim strSql = "select * from Posts p
+            Dim strSql = "select p.PostID, p.UserID, p.Title, p.PostText, p.TimeStamp, p.PostCategoryID, p.Image, p.TotalLikes, p.TotalDislikes, pc.PostCategoryID, pc.Name,
+ua.Username, ua.UserImage
+from Posts p
                             join UserAuth ua
                             on p.UserID = ua.UserID
 							join PostCategory pc
@@ -74,10 +84,10 @@ Public Class PostDAL
             conn.Open()
             dr = cmd.ExecuteReader()
             If dr.HasRows Then
-                While dr.Read
+                While dr.Read()
                     Dim post As New Post With {
                         .UserID = CInt(dr("UserID")),
-                        .PostID = dr("PostID").ToString(),
+                        .PostID = CInt(dr("PostID")),
                         .Title = dr("Title").ToString(),
                         .PostText = dr("PostText").ToString(),
                         .TimeStamp = DirectCast(dr("TimeStamp"), Date),
@@ -85,9 +95,15 @@ Public Class PostDAL
                         .Image = dr("Image").ToString(),
                         .TotalLikes = CInt(dr("TotalLikes")),
                         .TotalDislikes = CInt(dr("TotalDislikes")),
+                        .Category = New Category With {
+                        .PostCategoryID = CInt(dr("PostCategoryID")),
+                        .Name = dr("Name").ToString()
+                    },
+                        .UserPost = New UserAuth With {
+                        .UserID = CInt(dr("UserID")),
                         .Username = dr("Username").ToString(),
-                        .CategoryName = dr("Name").ToString(),
-                        .UserImage = dr("UserImage").ToString()
+                        .UserImage = dr("Userimage").ToString()
+                        }
                     }
                     Posts.Add(post)
                 End While
@@ -105,7 +121,9 @@ Public Class PostDAL
     Public Function GetAllPostbySearch(ByVal query As String) As List(Of Post) Implements IPost.GetAllPostbySearch
         Dim Posts As New List(Of Post)
         Try
-            Dim strSql = "select * from Posts p
+            Dim strSql = "select p.PostID, p.UserID, p.Title, p.PostText, p.TimeStamp, p.PostCategoryID, p.Image, p.TotalLikes, p.TotalDislikes, pc.PostCategoryID, pc.Name,
+ua.Username, ua.UserImage
+from Posts p
                             join UserAuth ua
                             on p.UserID = ua.UserID
 							join PostCategory pc
@@ -119,10 +137,10 @@ Public Class PostDAL
             conn.Open()
             dr = cmd.ExecuteReader()
             If dr.HasRows Then
-                While dr.Read
+                While dr.Read()
                     Dim post As New Post With {
                         .UserID = CInt(dr("UserID")),
-                        .PostID = dr("PostID").ToString(),
+                        .PostID = CInt(dr("PostID")),
                         .Title = dr("Title").ToString(),
                         .PostText = dr("PostText").ToString(),
                         .TimeStamp = DirectCast(dr("TimeStamp"), Date),
@@ -130,9 +148,15 @@ Public Class PostDAL
                         .Image = dr("Image").ToString(),
                         .TotalLikes = CInt(dr("TotalLikes")),
                         .TotalDislikes = CInt(dr("TotalDislikes")),
+                        .Category = New Category With {
+                        .PostCategoryID = CInt(dr("PostCategoryID")),
+                        .Name = dr("Name").ToString()
+                    },
+                        .UserPost = New UserAuth With {
+                        .UserID = CInt(dr("UserID")),
                         .Username = dr("Username").ToString(),
-                        .CategoryName = dr("Name").ToString(),
-                        .UserImage = dr("UserImage").ToString()
+                        .UserImage = dr("Userimage").ToString()
+                        }
                     }
                     Posts.Add(post)
                 End While
@@ -151,9 +175,13 @@ Public Class PostDAL
     Public Function GetPostbyID(ByVal postID As Integer) As Post Implements IPost.GetPostbyID
         Try
             Dim resPost As New Post
-            Dim strSql = "select * from Posts p
+            Dim strSql = "select p.PostID, p.UserID, p.Title, p.PostText, p.TimeStamp, p.PostCategoryID, p.Image, p.TotalLikes, p.TotalDislikes, pc.PostCategoryID, pc.Name,
+ua.Username, ua.UserImage
+from Posts p
                             join UserAuth ua
                             on p.UserID = ua.UserID
+							join PostCategory pc
+							on p.PostCategoryID = pc.PostCategoryID
                             where p.PostID = @postID"
             conn = New SqlConnection(strConn)
             cmd = New SqlCommand(strSql, conn)
@@ -166,13 +194,20 @@ Public Class PostDAL
                 resPost.PostID = CInt(dr("PostID"))
                 resPost.Title = dr("Title").ToString()
                 resPost.PostText = dr("PostText").ToString()
-                resPost.TimeStamp = dr("TimeStamp").ToString()
+                resPost.TimeStamp = DirectCast(dr("TimeStamp"), Date)
                 resPost.PostCategoryID = CInt(dr("PostCategoryID"))
                 resPost.Image = dr("Image").ToString()
                 resPost.TotalLikes = CInt(dr("TotalLikes"))
                 resPost.TotalDislikes = CInt(dr("TotalDislikes"))
-                resPost.Username = dr("Username").ToString()
-                resPost.UserImage = dr("UserImage").ToString()
+                resPost.Category = New Category With {
+                        .PostCategoryID = CInt(dr("PostCategoryID")),
+                        .Name = dr("Name").ToString()
+                    }
+                resPost.UserPost = New UserAuth With {
+                        .UserID = CInt(dr("UserID")),
+                        .Username = dr("Username").ToString(),
+                        .UserImage = dr("Userimage").ToString()
+                        }
             End If
             dr.Close()
             Return resPost
@@ -321,6 +356,31 @@ SELECT	'Return Value' = @return_value"
             conn.Close()
         End Try
     End Function
+    Public Function GetUserLike(ByVal postID As Integer) As IEnumerable(Of Integer) Implements IPost.GetUserLike
+        Try
+            Dim listUser As New List(Of Integer)
+            Dim strSql = "select * from LikePost where PostID = @postID"
+            conn = New SqlConnection(strConn)
+            cmd = New SqlCommand(strSql, conn)
+            cmd.Parameters.AddWithValue("@postID", postID)
+            conn.Open()
+            dr = cmd.ExecuteReader()
+            If dr.HasRows Then
+                While dr.Read()
+                    Dim userID = CInt(dr("UserID"))
+                    listUser.Add(userID)
+                End While
+            End If
+            dr.Close()
+
+            Return listUser
+        Catch ex As Exception
+            Throw
+        Finally
+            cmd.Dispose()
+            conn.Close()
+        End Try
+    End Function
     Public Sub DislikePost(ByVal postID As Integer, ByVal userID As Integer) Implements IPost.DislikePost
         Using conn As New SqlConnection(strConn)
             Dim strSql As String = "DECLARE	@return_value int
@@ -362,6 +422,31 @@ SELECT	'Return Value' = @return_value"
             res = dr.HasRows
             dr.Close()
             Return res
+        Catch ex As Exception
+            Throw
+        Finally
+            cmd.Dispose()
+            conn.Close()
+        End Try
+    End Function
+    Public Function GetUserDislike(ByVal postID As Integer) As IEnumerable(Of Integer) Implements IPost.GetUserDislike
+        Try
+            Dim listUser As New List(Of Integer)
+            Dim strSql = "select * from UnlikePost where PostID = @postID"
+            conn = New SqlConnection(strConn)
+            cmd = New SqlCommand(strSql, conn)
+            cmd.Parameters.AddWithValue("@postID", postID)
+            conn.Open()
+            dr = cmd.ExecuteReader()
+            If dr.HasRows Then
+                While dr.Read()
+                    Dim userID = CInt(dr("UserID"))
+                    listUser.Add(userID)
+                End While
+            End If
+            dr.Close()
+
+            Return listUser
         Catch ex As Exception
             Throw
         Finally

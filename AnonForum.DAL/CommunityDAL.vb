@@ -12,6 +12,7 @@ Public Class CommunityDAL
 
     Public Sub New()
         strConn = Helper.GetConnectionString()
+        conn = New SqlConnection(strConn)
     End Sub
     Public Function GetAll() As IEnumerable(Of Community) Implements ICommunity.GetAll
         Dim communities As New List(Of Community)

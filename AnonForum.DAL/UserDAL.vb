@@ -13,7 +13,8 @@ Public Class UserDAL
 
 
     Public Sub New()
-        strConn = New SqlConnection(ConfigurationManager.AppSettings.Get("MyDbConnectionString")).ConnectionString
+        strConn = Helper.GetConnectionString()
+        conn = New SqlConnection(strConn)
     End Sub
 
     Public Function GetAll() As IEnumerable(Of UserAuth) Implements IUser.GetAllUser
@@ -131,6 +132,7 @@ Public Class UserDAL
                     user.Email = dr("Email").ToString()
                     user.Nickname = dr("Nickname").ToString()
                     user.Password = dr("Password").ToString()
+                    user.UserImage = dr("UserImage").ToString()
                 End If
 
                 dr.Close()
