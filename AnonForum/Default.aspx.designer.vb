@@ -23,15 +23,6 @@ Partial Public Class _Default
     Protected WithEvents isLogin As Global.System.Web.UI.HtmlControls.HtmlGenericControl
 
     '''<summary>
-    '''testLabel control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents testLabel As Global.System.Web.UI.WebControls.Label
-
-    '''<summary>
     '''btnLogout control.
     '''</summary>
     '''<remarks>
@@ -86,6 +77,15 @@ Partial Public Class _Default
     Protected WithEvents btnPost As Global.System.Web.UI.WebControls.Button
 
     '''<summary>
+    '''ddlFilter control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents ddlFilter As Global.System.Web.UI.WebControls.DropDownList
+
+    '''<summary>
     '''postRepeater control.
     '''</summary>
     '''<remarks>
@@ -93,4 +93,22 @@ Partial Public Class _Default
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents postRepeater As Global.System.Web.UI.WebControls.Repeater
+
+    '''<summary>
+    '''btnPreviousPage control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents btnPreviousPage As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>
+    '''btnNextPage control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents btnNextPage As Global.System.Web.UI.WebControls.Button
 End Class

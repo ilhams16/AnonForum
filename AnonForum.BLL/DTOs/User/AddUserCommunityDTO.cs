@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace AnonForum.BLL.DTOs.Community
+namespace AnonForum.BLL.DTOs.User
 {
-	public class CommunityDTO
+	public class AddUserCommunityDTO
 	{
 		public int CommunityID { get; set; }
-		public string CommunityName { get; set;}
+		public int UserID { get; set; }
 	}
 }

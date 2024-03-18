@@ -148,8 +148,10 @@ namespace AnonForum.BLL
             return userDto;
         }
 
-
-
+        public void AddUserCommunity(AddUserCommunityDTO userCommunityDTO) 
+        {
+            _userDAL.AddUserCommunity(userCommunityDTO.CommunityID, userCommunityDTO.UserID);
+        }
 
     }
 }

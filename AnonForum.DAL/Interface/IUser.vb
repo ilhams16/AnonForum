@@ -1,7 +1,7 @@
 ﻿Imports AnonForum.BO
 
 Public Interface IUser
-    Sub AddUserCommunity(communityID As Integer, userID As Integer)
+    Sub AddUserCommunity(commID As Integer, userID As Integer)
     Function AddNewUser(user As UserAuth)
     Function GetAllUser() As IEnumerable(Of UserAuth)
     Function UserLogin(usernameOrEmail As String, password As String) As UserAuth

@@ -131,6 +131,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\comment.png" />
+    <Content Include="discussion.png" />
     <Content Include="Assets\dislike.png" />
     <Content Include="Assets\heart.png" />
     <Content Include="Assets\like.png" />

@@ -1,4 +1,5 @@
 ﻿Imports System.Data.SqlClient
+Imports System.Text
 Imports AnonForum.BO
 
 Public Class PostDAL

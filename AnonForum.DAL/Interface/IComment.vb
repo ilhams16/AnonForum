@@ -10,5 +10,6 @@ Public Interface IComment
     Function GetAllCommentbyPostID(postID As Integer) As IEnumerable(Of Comment)
     Function GetLike(commentID As Integer, postID As Integer, userID As Integer) As Boolean
     Function GetDislike(commentID As Integer, postID As Integer, userID As Integer) As Boolean
+    Sub DeleteComment(commentID As Integer)
     Function GetCommentbyUserIDandPostID(userID As Integer, postID As Integer) As Comment
 End Interface

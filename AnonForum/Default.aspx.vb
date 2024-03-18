@@ -1,4 +1,5 @@
 ﻿Imports System.ComponentModel
+Imports System.IO
 Imports System.Runtime.InteropServices
 Imports AnonForum.BLL
 Imports AnonForum.BLL.DTOs.Comment
@@ -25,13 +26,24 @@ Public Class _Default
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As EventArgs) Handles Me.Load
         If Not (IsPostBack) Then
-            Dim posts = GetPostsFromDatabase()
-            postRepeater.DataSource = posts
-            postRepeater.DataBind()
             BindCategories()
-            If (Context.User.Identity.IsAuthenticated) Then
+            ViewState("CurrentPage") = 1 ' Set the initial page number in ViewState
+            If Request.QueryString("query") IsNot Nothing Then
+                BindDatabySearch(ViewState("CurrentPage"), Request.QueryString("query").ToString())
+            Else
+                BindData(ViewState("CurrentPage"))
+            End If
+            If Context.User.Identity.IsAuthenticated Then
                 isLogin.Visible = True
             End If
+        End If
+    End Sub
+    Protected Sub ddlFilter_SelectedIndexChanged(ByVal sender As Object, ByVal e As EventArgs) Handles ddlFilter.SelectedIndexChanged
+        ViewState("CurrentPage") = 1 ' Reset the page number when filter changes
+        If CInt(ddlFilter.SelectedValue) = 0 Then
+            BindData(ViewState("CurrentPage"))
+        Else
+            BindDatabyCategory(ViewState("CurrentPage"), CInt(ddlFilter.SelectedValue))
         End If
     End Sub
     Protected Sub BindCategories()
@@ -39,12 +51,70 @@ Public Class _Default
         ddlCategories.DataSource = categories
         ddlCategories.DataBind()
         ddlCategories.Items.Insert(0, New ListItem("Select Category", "-1"))
+        ddlFilter.DataSource = categories
+        ddlFilter.DataBind()
+        ddlFilter.Items.Insert(0, New ListItem("All Category", "0"))
     End Sub
     Protected Function GetPostsFromDatabase()
         Dim posts = _postBLL.GetAllPosts()
         Return posts
     End Function
+    Protected Function GetPostsFromDatabasebyCategory(ByVal catID As Integer)
+        Dim posts = _postBLL.GetAllPostsbyCategory(catID)
+        Return posts
+    End Function
+    Protected Function GetPostsFromDatabasebySearch(ByVal query As String)
+        Dim posts = _postBLL.GetAllPostsbySearch(query)
+        Return posts
+    End Function
 
+    Private Sub BindData(ByVal pageNumber As Integer)
+        Dim data = GetDataForPage(pageNumber, GetPostsFromDatabase())
+        postRepeater.DataSource = data
+        postRepeater.DataBind()
+    End Sub
+    Private Sub BindDatabyCategory(ByVal pageNumber As Integer, ByVal catID As Integer)
+        Dim data = GetDataForPage(pageNumber, GetPostsFromDatabasebyCategory(catID))
+        postRepeater.DataSource = data
+        postRepeater.DataBind()
+    End Sub
+    Private Sub BindDatabySearch(ByVal pageNumber As Integer, ByVal query As String)
+        Dim data = GetDataForPage(pageNumber, GetPostsFromDatabasebySearch(query))
+        postRepeater.DataSource = data
+        postRepeater.DataBind()
+    End Sub
+
+    Private Function GetDataForPage(ByVal pageNumber As Integer, ByVal dataBase As Object)
+        Dim allData As IEnumerable(Of PostDTO) = dataBase
+        Dim pageSize As Integer = 10 ' Set your desired page size
+        Dim skip As Integer = (pageNumber - 1) * pageSize
+        Dim pageData As IEnumerable(Of PostDTO) = allData.Skip(skip).Take(pageSize).ToList()
+
+        Return pageData
+    End Function
+    Protected Sub btnNextPage_Click(sender As Object, e As EventArgs)
+        Dim currentPage As Integer = ViewState("CurrentPage") ' Get the current page number from ViewState
+        Dim maxPage As Integer = postRepeater.Items.Count
+        If currentPage = maxPage Then
+            BindData(currentPage) ' Bind data for the next page
+            ViewState("CurrentPage") = currentPage ' Update the current page number in ViewState
+        Else
+            Dim nextPage As Integer = currentPage + 1 ' Increment the current page number to navigate to the next page
+            BindData(nextPage) ' Bind data for the next page
+            ViewState("CurrentPage") = nextPage ' Update the current page number in ViewState
+        End If
+    End Sub
+    Protected Sub btnPreviousPage_Click(sender As Object, e As EventArgs)
+        Dim currentPage As Integer = ViewState("CurrentPage") ' Get the current page number from ViewState
+        If currentPage >= 1 Then
+            Dim previousPage As Integer = currentPage - 1 ' Decrement the current page number to navigate to the previous page
+            BindData(previousPage) ' Bind data for the previous page
+            ViewState("CurrentPage") = previousPage ' Update the current page number in ViewState
+        Else
+            BindData(currentPage)
+            ViewState("CurrentPage") = currentPage
+        End If
+    End Sub
     Protected Sub postRepeater_ItemCommand(source As Object, e As RepeaterCommandEventArgs) Handles postRepeater.ItemCommand
         Dim userID As Integer = CInt(DirectCast(e.Item.FindControl("UserID"), Label).Text)
         Dim postID As Integer = CInt(DirectCast(e.Item.FindControl("PostID"), Label).Text)
@@ -54,35 +124,37 @@ Public Class _Default
         Dim cat As Integer = CInt(DirectCast(e.Item.FindControl("ddlEditCategories"), DropDownList).Text)
         If e.CommandName = "likePost" Then
             Dim likeBtn = _postBLL.GetLikePost(postID, currentUserID)
-            If likeBtn Then
-                _postBLL.UnlikePost(postID, currentUserID)
+            If (Context.User.Identity.IsAuthenticated) Then
+                If likeBtn Then
+                    _postBLL.UnlikePost(postID, currentUserID)
+                Else
+                    _postBLL.LikePost(postID, currentUserID)
+                End If
+                Response.Redirect(Request.Url.AbsoluteUri)
             Else
-                _postBLL.LikePost(postID, currentUserID)
+                Response.Redirect("/Login")
             End If
-            Response.Redirect("/", True)
         ElseIf e.CommandName = "dislikePost" Then
             Dim dislikeBtn = _postBLL.GetDislikePost(postID, currentUserID)
-            If dislikeBtn Then
-                _postBLL.UndislikePost(postID, currentUserID)
+            If (Context.User.Identity.IsAuthenticated) Then
+                If dislikeBtn Then
+                    _postBLL.UndislikePost(postID, currentUserID)
+                Else
+                    _postBLL.DislikePost(postID, currentUserID)
+                End If
+                Response.Redirect(Request.Url.AbsoluteUri)
             Else
-                _postBLL.DislikePost(postID, currentUserID)
+                Response.Redirect("/Login")
             End If
-            Response.Redirect("/", True)
         ElseIf e.CommandName = "deletePost" Then
             _postBLL.DeletePost(postID)
             Response.Redirect("/", True)
-        ElseIf e.CommandName = "btnComment" Then
-            If Visible Then
-                Visible = False
-            Else
-                Visible = True
-            End If
         ElseIf e.CommandName = "editPost" Then
             Dim edit As New EditPostDTO With {
-                .Title = title,
-                .PostText = post,
-                .PostCategoryID = cat
-            }
+            .Title = title,
+            .PostText = post,
+            .PostCategoryID = cat
+        }
             _postBLL.EditPost(edit, editPostID)
             Response.Redirect("/", True)
         End If
@@ -111,12 +183,15 @@ Public Class _Default
         comment.DataBind()
         If e.Item.ItemType = ListItemType.Item OrElse e.Item.ItemType = ListItemType.AlternatingItem Then
             Dim deleteButton As Button = DirectCast(e.Item.FindControl("btnDelete"), Button)
-            Dim showEdit As Literal = DirectCast(e.Item.FindControl("showEdit"), Literal)
+            Dim editBtn As HtmlButton = DirectCast(e.Item.FindControl("editBtn"), HtmlButton)
+            'Dim showEdit As Literal = DirectCast(e.Item.FindControl("showEdit"), Literal)
             If Context.User.Identity.Name.Trim() = username.Trim() Then
                 deleteButton.Visible = True
-                showEdit.Text = "<button type='button' class='btn btn-info' onclick='showModal(" & "&" & "Container.ItemIndex" & "&" & ")'>Edit</button>"
+                'showEdit.Text = "<button type=" & "button" & "id=" & "editBtn" & "class=" & "btn btn-info" & "onclick='<%# " & "showModal(" & "& Container.ItemIndex & " & ")" & "%>'>Edit</button>"
+                editBtn.Visible = True
             Else
                 deleteButton.Visible = False
+                editBtn.Visible = False
             End If
         End If
     End Sub
@@ -127,6 +202,19 @@ Public Class _Default
         post.PostText = txtPostText.Text
         post.Title = txtTitle.Text
         post.PostCategoryID = CInt(ddlCategories.Text)
+        Dim fileName As String = Guid.NewGuid().ToString() + Path.GetExtension(fileImage.FileName)
+
+        ' Specify the directory to save the uploaded file
+        Dim uploadDirectory As String = Server.MapPath("~/PostImages/")
+
+        ' Create the directory if it doesn't exist
+        If Not Directory.Exists(uploadDirectory) Then
+            Directory.CreateDirectory(uploadDirectory)
+        End If
+
+        ' Save the uploaded file to the server
+        fileImage.SaveAs(Path.Combine(uploadDirectory, fileName))
+        post.Image = fileName
         _postBLL.AddNewPost(post)
         Response.Redirect("/")
     End Sub
@@ -150,8 +238,6 @@ Public Class _Default
         dislikeButton.CssClass = If(dislikeBtn, "btn-danger btn form-control", "btn-secondary btn form-control")
         likeButton.Text = If(likeBtn, "Unlike", "Like")
         dislikeButton.Text = If(dislikeBtn, "Undislike", "Dislike")
-
-
         If e.Item.ItemType = ListItemType.Item OrElse e.Item.ItemType = ListItemType.AlternatingItem Then
             Dim deleteButton As Button = DirectCast(e.Item.FindControl("btnDelete"), Button)
             If Context.User.Identity.Name.Trim() = username.Trim() Then
@@ -166,32 +252,46 @@ Public Class _Default
         Dim commentID As Integer = CInt(DirectCast(e.Item.FindControl("CommentID"), Label).Text)
         Dim postID As Integer = CInt(DirectCast(e.Item.FindControl("PostID"), Label).Text)
         Dim comment As String = DirectCast(e.Item.FindControl("txtComment"), TextBox).Text
+        Dim test As Label = DirectCast(e.Item.FindControl("test"), Label)
         If e.CommandName = "likeComment" Then
             Dim likeBtn = _comBLL.GetLike(commentID, postID, currentUserID)
-            If likeBtn Then
-                _comBLL.UnlikeComment(commentID, postID, currentUserID)
+            If (Context.User.Identity.IsAuthenticated) Then
+                If likeBtn Then
+                    _comBLL.UnlikeComment(commentID, postID, currentUserID)
+                Else
+                    _comBLL.LikeComment(commentID, postID, currentUserID)
+                End If
+                Response.Redirect("/", True)
             Else
-                _comBLL.LikeComment(commentID, postID, currentUserID)
+                Response.Redirect("/Login")
             End If
-            Response.Redirect("/", True)
         ElseIf e.CommandName = "dislikeComment" Then
             Dim dislikeBtn = _comBLL.GetDislike(commentID, postID, currentUserID)
-            If dislikeBtn Then
-                _comBLL.UndislikeComment(commentID, postID, currentUserID)
+            If (Context.User.Identity.IsAuthenticated) Then
+                If dislikeBtn Then
+                    _comBLL.UndislikeComment(commentID, postID, currentUserID)
+                Else
+                    _comBLL.DislikeComment(commentID, postID, currentUserID)
+                End If
+                Response.Redirect("/", True)
             Else
-                _comBLL.DislikeComment(commentID, postID, currentUserID)
+                Response.Redirect("/Login")
             End If
-            Response.Redirect("/", True)
         ElseIf e.CommandName = "deleteComment" Then
-            _comBLL.DeleteComment(commentID, postID, currentUserID)
+            _comBLL.DeleteComment(commentID)
             Response.Redirect("/", True)
         ElseIf e.CommandName = "postComment" Then
-            Dim newComment As New CreateCommentDTO
-            newComment.PostID = postID
-            newComment.UserID = currentUserID
-            newComment.Comment = comment
-            _comBLL.AddNewComment(newComment)
-            Response.Redirect("/", True)
+            If (Context.User.Identity.IsAuthenticated) Then
+                Dim newComment As New CreateCommentDTO With {
+                .PostID = postID,
+                .UserID = currentUserID,
+                .Comment = comment
+            }
+                _comBLL.AddNewComment(newComment)
+                Response.Redirect("/", True)
+            Else
+                Response.Redirect("/Login")
+            End If
         End If
     End Sub
 End Class

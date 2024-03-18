@@ -1,8 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 using AnonForum.BLL.DTOs.Community;
-using AnonForum.BLL.DTOs.User;
 using AnonForum.BLL.Interface;
 using AnonForum.BO;
 using AnonForum.DAL;
@@ -14,21 +13,29 @@ namespace AnonForum.BLL
 		private readonly ICommunity _communityDAL;
 		public CommunityBLL()
 		{
-			_communityDAL = new AnonForum.DAL;
+			_communityDAL = new CommunityDAL();
 		}
-		public string AddNewUser(AddUserCommunityDTO addUserCommunityDTO)
+		public IEnumerable<Community> GetAll()
 		{
 			try
 			{
-				var newUser = new UserAuth
-				{
-					Username = entity.Username,
-					Email = entity.Email,
-					Password = entity.Password,
-					Nickname = entity.Nickname,
-					UserImage = entity.UserImage,
-				};
-				return (string)_userDAL.AddNewUser(newUser);
+				return _communityDAL.GetAll();
+			}
+			catch (Exception ex)
+			{
+				throw new ArgumentException(ex.Message);
+			}
+		}
+		public CommunityDTO GetbyID(int id)
+		{
+			var commDto = new CommunityDTO();
+			try
+			{
+				var comm = _communityDAL.GetByID(id);
+				commDto.CommunityID = comm.CommunityID;
+				commDto.CommunityName = comm.ComunityName;
+
+				return commDto;
 			}
 			catch (Exception ex)
 			{
@@ -36,8 +43,4 @@ namespace AnonForum.BLL
 			}
 		}
 	}
-
-    internal interface ICommunity
-    {
-    }
 }
