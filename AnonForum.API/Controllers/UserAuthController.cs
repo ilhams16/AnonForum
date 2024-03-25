@@ -41,8 +41,8 @@ namespace AnonForum.API.Controllers
         }
 
         // GET api/<UserAuthController>/5
-        [Authorize]
-        //[Authorize(Policy = "RequireAdminRole")]
+        //[Authorize]
+        [Authorize(Policy = "RequireAdminRole")]
         [HttpGet("{id}")]
         public async Task<UserDTO> Get(int id)
         {
@@ -111,8 +111,8 @@ namespace AnonForum.API.Controllers
         }
 
         // DELETE api/<UserAuthController>/5
-        [Authorize]
-        //[Authorize(Policy = "RequireAdminRole")]
+        //[Authorize]
+        [Authorize(Policy = "RequireAdminRole")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

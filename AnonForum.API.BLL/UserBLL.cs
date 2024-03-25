@@ -102,7 +102,8 @@ namespace AnonForum.API.BLL
             {
                 throw new ArgumentException("Invalid username or password");
             }
-            var userDTO = _mapper.Map<UserDTO>(user);
+            var userWithRoles = await _userData.GetbyIDWithRoles(user.UserId);
+            var userDTO = _mapper.Map<UserDTO>(userWithRoles);
             return userDTO;
         }
     }

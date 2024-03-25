@@ -58,10 +58,21 @@ namespace AnonForum.API.Controllers
         // POST api/<PostsController>
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] CreatePostDTO createPost)
+        public async Task<IActionResult> Post([FromBody] CreatePostDTO createPost, IFormFile file)
         {
             try
             {
+                if (file == null || file.Length == 0)
+                {
+                    return BadRequest("File is required");
+                }
+                var newName = $"{Guid.NewGuid()}_{file.FileName}";
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", newName);
+                using (var stream = new FileStream(path, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+                createPost.Image = newName;
                 await _postBLL.AddNewPost(createPost);
                 return CreatedAtAction("Get", createPost);
             }
