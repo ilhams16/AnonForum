@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace AnonForum.BLL.DTOs.User
+namespace AnonForum.API.BLL.DTOs.User
 {
     public class UserLoginDTO
     {
@@ -11,6 +11,5 @@ namespace AnonForum.BLL.DTOs.User
         public string UsernameOrEmail { get; set; }
         [Required(ErrorMessage = "Please enter your password.")]
         public string Password { get; set; }
-        public string Token { get; set; }
     }
 }
