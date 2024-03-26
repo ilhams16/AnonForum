@@ -35,8 +35,7 @@ namespace AnonForum.API.Data
         {
             try
             {
-                user.Password = Sha256Hash.GetHash(user.Password);
-                _context.UserAuths.Add(user);
+                _context.UserAuths.FromSqlRaw("EXEC [dbo].[NewUser] {0}, {1}, {2}, {3}, {4}", user.Username, user.Email, user.Password, user.Nickname, user.UserImage).AsEnumerable();
                 await _context.SaveChangesAsync();
                 return user;
             }

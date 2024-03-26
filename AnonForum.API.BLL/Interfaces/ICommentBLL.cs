@@ -16,9 +16,9 @@ namespace AnonForum.API.BLL.Interfaces
         Task<CommentDTO> GetCommentbyUserIDandPostID(int userID, int postID);
         Task<IEnumerable<LikeCommentDTO>> GetLike(int commentID);
         Task<IEnumerable<DislikeCommentDTO>> GetDislike(int commentID);
-        Task LikeComment(int commentID, int userID);
+        Task LikeComment(int commentID, int userID, int postID);
         Task UnlikeComment(int commentID, int userID);
-        Task DislikeComment(int commentID, int userID);
+        Task DislikeComment(int commentID, int userID, int postID);
         Task UndislikeComment(int commentID, int userID);
         Task<CommentDTO> GetCommentbyCommentID(int commentID);
         Task<CommentDTO> EditComment(EditCommentDTO entity);

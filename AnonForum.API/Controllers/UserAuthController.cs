@@ -31,8 +31,8 @@ namespace AnonForum.API.Controllers
             _logger = logger;
         }
         // GET: api/<UserAuthController>
-        [Authorize]
-        //[Authorize(Policy = "RequireAdminRole")]
+        //[Authorize]
+        [Authorize(Policy = "RequireAdminRole")]
         [HttpGet]
         public async Task<IEnumerable<UserDTO>> GetAsync()
         {
@@ -97,10 +97,20 @@ namespace AnonForum.API.Controllers
 
         // POST api/<UserAuthController>
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] CreateUserDTO createUser)
+        public async Task<IActionResult> Post([FromForm] CreateUserDTO createUser)
         {
             try
             {
+                if (createUser.File != null)
+                {
+                    var newName = $"{Guid.NewGuid()}_{createUser.File.FileName}";
+                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "UserImages", newName);
+                    using (var stream = new FileStream(path, FileMode.Create))
+                    {
+                        await createUser.File.CopyToAsync(stream);
+                    }
+                    createUser.UserImage = newName;
+                }
                 await _userBLL.AddNewUser(createUser);
                 return CreatedAtAction("Get", createUser);
             }

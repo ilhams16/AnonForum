@@ -1,4 +1,5 @@
-﻿using AnonForum.API.Data.Interfaces;
+﻿using System.ComponentModel.Design;
+using AnonForum.API.Data.Interfaces;
 using AnonForum.API.Domain;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,7 +16,7 @@ namespace AnonForum.API.Data
         {
             try
             {
-                _context.Posts.Add(post);
+                await _context.ExecuteSqlAsync("EXEC [dbo].[NewPost] {0}, {1}, {2}, {3}, {4}", post.UserId, post.Title, post.PostText, post.PostCategoryId, post.Image);
                 await _context.SaveChangesAsync();
                 return post;
             }
@@ -32,16 +33,13 @@ namespace AnonForum.API.Data
             {
                 throw new ArgumentException("Post not found");
             }
-            _context.Posts.Remove(post);
+            await _context.ExecuteSqlAsync("EXEC [dbo].[DeletePost] {0}", postID);
             await _context.SaveChangesAsync();
         }
 
         public async Task DislikePost(int postID, int userID)
         {
-            var post = new UnlikePost();
-            post.PostId = postID;
-            post.UserId = userID;
-            _context.UnlikePosts.Add(post);
+            await _context.ExecuteSqlAsync("EXEC [dbo].[UnlikePostSP] {0}, {1}", userID, postID);
             await _context.SaveChangesAsync();
         }
 
@@ -105,10 +103,7 @@ namespace AnonForum.API.Data
 
         public async Task LikePost(int postID, int userID)
         {
-            var post = new LikePost();
-            post.PostId = postID;
-            post.UserId = userID;
-            _context.LikePosts.Add(post);
+            await _context.ExecuteSqlAsync("EXEC [dbo].[LikePostSP] {0}, {1}", userID, postID);
             await _context.SaveChangesAsync();
         }
 

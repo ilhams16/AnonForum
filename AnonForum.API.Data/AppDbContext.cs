@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using AnonForum.API.Domain;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace AnonForum.API.Data;
 
@@ -53,22 +54,22 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.TotalLikes).HasComputedColumnSql("([dbo].[GetLikeComment]([PostID],[CommentID]))", false);
 
             entity.HasOne(d => d.Post).WithMany(p => p.Comments)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_Comments_Posts");
 
             entity.HasOne(d => d.User).WithMany(p => p.Comments)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_Comments_UserAuth");
         });
 
         modelBuilder.Entity<LikeComment>(entity =>
         {
             entity.HasOne(d => d.Comment).WithMany(p => p.LikeComments)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_LikeComment_Comments");
 
             entity.HasOne(d => d.Post).WithMany(p => p.LikeComments)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_LikeComment_Posts");
 
             entity.HasOne(d => d.User).WithMany(p => p.LikeComments)
@@ -79,11 +80,11 @@ public partial class AppDbContext : DbContext
         modelBuilder.Entity<LikePost>(entity =>
         {
             entity.HasOne(d => d.Post).WithMany(p => p.LikePosts)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_LikePost_Posts");
 
             entity.HasOne(d => d.User).WithMany(p => p.LikePosts)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_LikePost_UserAuth");
         });
 
@@ -94,11 +95,11 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.TotalLikes).HasComputedColumnSql("([dbo].[GetLikePost]([PostID]))", false);
 
             entity.HasOne(d => d.PostCategory).WithMany(p => p.Posts)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_Posts_PostCategory");
 
             entity.HasOne(d => d.User).WithMany(p => p.Posts)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_Posts_UserAuth");
         });
 
@@ -111,26 +112,26 @@ public partial class AppDbContext : DbContext
                 entity.Property(e => e.UnlikeCommentId).ValueGeneratedOnAdd();
 
                 entity.HasOne(d => d.Comment).WithMany()
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_UnlikeComment_Comments");
 
                 entity.HasOne(d => d.Post).WithMany()
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_UnlikeComment_Posts");
 
                 entity.HasOne(d => d.User).WithMany()
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_UnlikeComment_UserAuth");
             });
 
             modelBuilder.Entity<UnlikePost>(entity =>
             {
                 entity.HasOne(d => d.Post).WithMany(p => p.UnlikePosts)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_UnlikePost_Posts");
 
                 entity.HasOne(d => d.User).WithMany(p => p.UnlikePosts)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_UnlikePost_UserAuth");
             });
 
@@ -142,11 +143,11 @@ public partial class AppDbContext : DbContext
             modelBuilder.Entity<UserCommunity>(entity =>
             {
                 entity.HasOne(d => d.Community).WithMany()
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_UserCommunity_Community");
 
                 entity.HasOne(d => d.User).WithMany()
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_UserCommunity_UserAuth");
             });
 
@@ -157,11 +158,11 @@ public partial class AppDbContext : DbContext
                         "UsersRoles",
                         r => r.HasOne<UserAuth>().WithMany()
                             .HasForeignKey("UserID")
-                            .OnDelete(DeleteBehavior.ClientSetNull)
+                            .OnDelete(DeleteBehavior.Cascade)
                             .HasConstraintName("FK_UsersRoles_Users"),
                         l => l.HasOne<Role>().WithMany()
                             .HasForeignKey("RoleId")
-                            .OnDelete(DeleteBehavior.ClientSetNull)
+                            .OnDelete(DeleteBehavior.Cascade)
                             .HasConstraintName("FK_UsersRoles_Roles"),
                         j =>
                         {
@@ -187,4 +188,13 @@ public partial class AppDbContext : DbContext
         }); }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+}
+
+public static class DbContextExtensions
+{
+    // Original extension method
+    public static async Task<int> ExecuteSqlAsync(this DbContext context, string sql, params object[] parameters)
+    {
+        return await context.Database.ExecuteSqlRawAsync(sql, parameters);
+    }
 }

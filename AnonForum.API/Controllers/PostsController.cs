@@ -13,14 +13,15 @@ namespace AnonForum.API.Controllers
     public class PostsController : ControllerBase
     {
         private readonly IPostBLL _postBLL;
-        private readonly IValidator<CreatePostDTO> _validatorCreatePostDto;
+        //private readonly IValidator<CreatePostDTO> _validatorCreatePostDto;
         private readonly IValidator<EditPostDTO> _validatorEditPostDTO;
 
-        public PostsController(IPostBLL postBLL, IValidator<CreatePostDTO> validatorCreatePostDto,
+        public PostsController(IPostBLL postBLL, 
+            //IValidator<CreatePostDTO> validatorCreatePostDto,
             IValidator<EditPostDTO> validatorEditPostDTO)
         {
             _postBLL = postBLL;
-            _validatorCreatePostDto = validatorCreatePostDto;
+            //_validatorCreatePostDto = validatorCreatePostDto;
             _validatorEditPostDTO = validatorEditPostDTO;
         }
         // GET: api/<PostsController>
@@ -29,6 +30,12 @@ namespace AnonForum.API.Controllers
         {
             return await _postBLL.GetAllPosts();
         }
+
+        //[HttpGet("Search")]
+        //public async Task<IEnumerable<PostDTO>> GetBySearch([FromQuery(Name = "search")] string query)
+        //{
+        //    return await _postBLL.GetAllPostsbySearch(query);
+        //}
 
         // GET api/<PostsController>/5
         [HttpGet("{id}")]
@@ -58,21 +65,20 @@ namespace AnonForum.API.Controllers
         // POST api/<PostsController>
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] CreatePostDTO createPost, IFormFile file)
+        public async Task<IActionResult> Post([FromForm] CreatePostDTO createPost)
         {
             try
             {
-                if (file == null || file.Length == 0)
+                if (createPost.ImageFilePost != null)
                 {
-                    return BadRequest("File is required");
+                    var newName = $"{Guid.NewGuid()}_{createPost.ImageFilePost.FileName}";
+                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "PostImages", newName);
+                    using (var stream = new FileStream(path, FileMode.Create))
+                    {
+                        await createPost.ImageFilePost.CopyToAsync(stream);
+                    }
+                    createPost.Image = newName;
                 }
-                var newName = $"{Guid.NewGuid()}_{file.FileName}";
-                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", newName);
-                using (var stream = new FileStream(path, FileMode.Create))
-                {
-                    await file.CopyToAsync(stream);
-                }
-                createPost.Image = newName;
                 await _postBLL.AddNewPost(createPost);
                 return CreatedAtAction("Get", createPost);
             }
@@ -88,7 +94,8 @@ namespace AnonForum.API.Controllers
             try
             {
                 await _postBLL.LikePost(postID, userID);
-                return CreatedAtAction("Get", postID);
+                var users = await _postBLL.GetLikePost(postID);
+                return CreatedAtAction("Get", users);
             }
             catch (Exception ex)
             {
@@ -102,7 +109,8 @@ namespace AnonForum.API.Controllers
             try
             {
                 await _postBLL.UnlikePost(postID, userID);
-                return CreatedAtAction("Get", postID);
+                var users = await _postBLL.GetLikePost(postID);
+                return CreatedAtAction("Get", users);
             }
             catch (Exception ex)
             {
@@ -116,7 +124,8 @@ namespace AnonForum.API.Controllers
             try
             {
                 await _postBLL.DislikePost(postID, userID);
-                return CreatedAtAction("Get", postID);
+                var users = await _postBLL.GetDislikePost(postID);
+                return CreatedAtAction("Get", users);
             }
             catch (Exception ex)
             {
@@ -130,7 +139,8 @@ namespace AnonForum.API.Controllers
             try
             {
                 await _postBLL.UndislikePost(postID, userID);
-                return CreatedAtAction("Get", postID);
+                var users = await _postBLL.GetDislikePost(postID);
+                return CreatedAtAction("Get", users);
             }
             catch (Exception ex)
             {
@@ -176,7 +186,7 @@ namespace AnonForum.API.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest($"{ex.Message} : {ex.InnerException}");
             }
         }
     }

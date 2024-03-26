@@ -1,6 +1,7 @@
 ﻿using AnonForum.API.BLL.DTOs.Comment;
 using AnonForum.API.BLL.DTOs.Post;
 using AnonForum.API.BLL.Interfaces;
+using AnonForum.DAL;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -52,7 +53,7 @@ namespace AnonForum.API.Controllers
             try
             {
                 await _commentBLL.AddNewComment(createComment);
-                return CreatedAtAction("Get", createComment);
+                return Ok("Added comment successfully");
             }
             catch (Exception ex)
             {
@@ -61,12 +62,12 @@ namespace AnonForum.API.Controllers
         }
         [Authorize]
         [HttpPost("Like")]
-        public async Task<IActionResult> LikeComment(int commentID, int userID)
+        public async Task<IActionResult> LikeComment(int commentID, int userID, int postID)
         {
             try
             {
-                await _commentBLL.LikeComment(commentID, userID);
-                return CreatedAtAction("Get", commentID);
+                await _commentBLL.LikeComment(commentID, userID, postID);
+                return Ok("Like successfully");
             }
             catch (Exception ex)
             {
@@ -75,12 +76,12 @@ namespace AnonForum.API.Controllers
         }
         [Authorize]
         [HttpPost("Unlike")]
-        public async Task<IActionResult> UnlikePost(int commentID, int userID)
+        public async Task<IActionResult> UnlikeComment(int commentID, int userID)
         {
             try
             {
                 await _commentBLL.UnlikeComment(commentID, userID);
-                return CreatedAtAction("Get", commentID);
+                return Ok("Unlike successfully");
             }
             catch (Exception ex)
             {
@@ -89,12 +90,12 @@ namespace AnonForum.API.Controllers
         }
         [Authorize]
         [HttpPost("Dislike")]
-        public async Task<IActionResult> DislikePost(int commentID, int userID)
+        public async Task<IActionResult> DislikeComment(int commentID, int userID, int postID)
         {
             try
             {
-                await _commentBLL.DislikeComment(commentID, userID);
-                return CreatedAtAction("Get", commentID);
+                await _commentBLL.DislikeComment(commentID, userID, postID);
+                return Ok("Dislike successfully");
             }
             catch (Exception ex)
             {
@@ -103,12 +104,12 @@ namespace AnonForum.API.Controllers
         }
         [Authorize]
         [HttpPost("Undislike")]
-        public async Task<IActionResult> UndislikePost(int commentID, int userID)
+        public async Task<IActionResult> UndislikeComment(int commentID, int userID)
         {
             try
             {
                 await _commentBLL.UndislikeComment(commentID, userID);
-                return CreatedAtAction("Get", commentID);
+                return Ok("Undislike successfully");
             }
             catch (Exception ex)
             {

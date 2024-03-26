@@ -15,7 +15,7 @@ namespace AnonForum.API.Data
         {
             try
             {
-                _context.Comments.Add(comment);
+                await _context.ExecuteSqlAsync("EXEC [dbo].[NewComment] {0}, {1}, {2}", comment.PostId, comment.UserId, comment.CommentText);
                 await _context.SaveChangesAsync();
                 return comment;
             }
@@ -39,21 +39,18 @@ namespace AnonForum.API.Data
 
         public async Task DeleteComment(int commentID)
         {
-            var comment = await _context.Posts.FindAsync(commentID);
+            var comment = await _context.Comments.FindAsync(commentID);
             if (comment == null)
             {
                 throw new ArgumentException("Comment not found");
             }
-            _context.Posts.Remove(comment);
+            await _context.ExecuteSqlAsync("EXEC [dbo].[DeleteComment] {0}",commentID);
             await _context.SaveChangesAsync();
         }
 
-        public async Task DislikeComment(int commentID, int userID)
+        public async Task DislikeComment(int commentID, int userID, int postID)
         {
-            var comment = new UnlikeComment();
-            comment.CommentId = commentID;
-            comment.UserId = userID;
-            _context.UnlikeComments.Add(comment);
+            await _context.ExecuteSqlAsync("EXEC [dbo].[UnlikeCommentSP] {0}, {1}, {2}", commentID, userID, postID);
             await _context.SaveChangesAsync();
         }
 
@@ -95,12 +92,9 @@ namespace AnonForum.API.Data
             return post;
         }
 
-        public async Task LikeComment(int commentID, int userID)
+        public async Task LikeComment(int commentID, int userID, int postID)
         {
-            var comment = new LikeComment();
-            comment.CommentId = commentID;
-            comment.UserId = userID;
-            _context.LikeComments.Add(comment);
+            await _context.ExecuteSqlAsync("EXEC [dbo].[LikeCommentSP] {0}, {1}, {2}", commentID, userID, postID);
             await _context.SaveChangesAsync();
         }
 

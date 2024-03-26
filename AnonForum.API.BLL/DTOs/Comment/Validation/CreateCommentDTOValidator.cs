@@ -11,7 +11,7 @@ namespace AnonForum.API.BLL.DTOs.Comment.Validation
     {
         public CreateCommentDTOValidator() 
         {
-            RuleFor(c => c.Comment).NotEmpty().WithMessage("Comment is required");
+            RuleFor(c => c.CommentText).NotEmpty().WithMessage("Comment is required");
         }
     }
 }

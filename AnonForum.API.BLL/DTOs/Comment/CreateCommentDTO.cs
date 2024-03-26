@@ -8,6 +8,6 @@ namespace AnonForum.API.BLL.DTOs.Comment
     {
         public int PostID { get; set; }
         public int UserID { get; set; }
-        public string Comment { get; set; }
+        public string CommentText { get; set; }
     }
 }

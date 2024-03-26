@@ -13,6 +13,7 @@ namespace AnonForum.API.BLL.DTOs.User
         public string Nickname { get; set; }
         public string Password { get; set; }
         public string ConfirmPassword { get; set; }
-        public string UserImage { get; set; }
+        public IFormFile File { get; set; }
+        public string? UserImage { get; set; }
     }
 }

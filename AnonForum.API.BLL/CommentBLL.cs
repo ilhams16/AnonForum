@@ -66,11 +66,11 @@ namespace AnonForum.API.BLL
             }
         }
 
-        public async Task DislikeComment(int commentID, int userID)
+        public async Task DislikeComment(int commentID, int userID, int postID)
         {
             try
             {
-                await _commentData.DislikeComment(commentID, userID);
+                await _commentData.DislikeComment(commentID, userID, postID);
             }
             catch (Exception ex)
             {
@@ -113,11 +113,11 @@ namespace AnonForum.API.BLL
             return commentDto;
         }
 
-        public async Task LikeComment(int commentID, int userID)
+        public async Task LikeComment(int commentID, int userID, int postID)
         {
             try
             {
-                await _commentData.LikeComment(commentID, userID);
+                await _commentData.LikeComment(commentID, userID, postID);
             }
             catch (Exception ex)
             {
